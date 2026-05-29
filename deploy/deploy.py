@@ -4,7 +4,7 @@ from pathlib import Path
 
 HOST = '43.135.112.189'
 KEY_PATH = r'C:\Users\ynlvs\.ssh\ynlawyers_key'
-PROJECT = Path(r'C:\Users\ynlvs\Desktop\法律网站')
+PROJECT = Path(r'C:\Users\ynlvs\Desktop\法律网站1')
 REMOTE = '/var/www/ynlawyers'
 EXCLUDE = ['__pycache__', '.secret_key', '*.pyc', 'deploy/upload_and_deploy.py']
 
@@ -75,7 +75,7 @@ print('\n[4/5] 配置 Nginx...')
 
 nginx_conf = '''server {
     listen 80;
-    server_name ynlawyers.com www.ynlawyers.com;
+    server_name lawyer01.com www.lawyer01.com;
 
     client_max_body_size 10M;
 
@@ -139,7 +139,7 @@ ssh.close()
 
 print('\n========================================')
 print('  部署完成！')
-print('  前台: http://ynlawyers.com')
-print('  后台: http://ynlawyers.com/admin')
+print('  前台: http://lawyer01.com')
+print('  后台: http://lawyer01.com/admin')
 print('  账号: admin / admin123')
 print('========================================')

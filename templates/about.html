@@ -1,46 +1,69 @@
 {% extends "base.html" %}
-{% block title %}关于团队 - {% endblock %}
+{% block title %}关于我们{% endblock %}
 {% block content %}
 
 <section class="page-header">
     <div class="container">
-        <h1>关于团队</h1>
-        <p>云南昆明 · 专业律师团队</p>
+        <h1>关于我们</h1>
+        <p>云南昆明 · 专业法律服务</p>
     </div>
 </section>
 
-<section class="team-intro-section">
+<section class="section about-intro-section">
     <div class="container">
-        <div class="team-intro-layout">
-            <div class="team-intro-side">
-                <div class="team-intro-avatar">邹</div>
-                <h2>{{ lawyer_name }}</h2>
-                <p class="team-intro-title">{{ lawyer_title }}<span class="region-tag-inline">云南昆明</span></p>
-                <div class="team-intro-contact">
-                    <p>📞 {{ phone if phone else '电话待设置' }}</p>
-                    <p>✉ {{ SiteSetting.get('contact_email', '邮箱待设置') }}</p>
-                </div>
-                <a href="/contact" class="btn btn-primary btn-block" style="margin-top:1rem;">预约咨询</a>
-            </div>
-            <div class="team-intro-main">
-                <h3>团队介绍</h3>
-                <p>邹卫华律师团队成立于云南昆明，由 {{ lawyer_name }} 律师领衔，汇集 10 余名经验丰富的执业律师，以团队协作模式为客户提供全方位法律服务。</p>
-                <p>团队成员毕业于国内知名法学院校，在建设工程、民商事诉讼、刑事辩护、政企法律顾问等领域积累了丰富的实务经验。团队始终秉持"专业立身、诚信为本"的执业理念，以严谨的工作态度和高效的协作机制，为每一位客户提供量身定制的法律解决方案。</p>
-                <h3>执业领域</h3>
-                <ul>
-                    <li><strong>🏗 建设工程法律纠纷</strong>（团队核心优势领域）— 工程款结算、工期索赔、质量鉴定、招投标争议</li>
-                    <li><strong>🏛 政企法律顾问</strong> — 政府机关及国有企业常年法律顾问、重大项目法律论证</li>
-                    <li><strong>⚖ 民商事诉讼</strong> — 合同纠纷、债权债务、房产纠纷、侵权责任</li>
-                    <li><strong>🛡 刑事辩护</strong> — 经济犯罪、职务犯罪等刑事辩护</li>
-                    <li><strong>🏢 公司法务</strong> — 企业法律顾问、合同审查、股权设计、合规管理</li>
-                    <li><strong>👨‍👩‍👧 婚姻家庭</strong> — 离婚纠纷、财产分割、子女抚养、遗产继承</li>
-                    <li><strong>👷 劳动争议</strong> — 劳动合同纠纷、工伤赔偿、社保争议</li>
-                </ul>
-                <h3>执业理念</h3>
-                <p>以专业立身，以诚信为本，以团队之力为客户创造最大价值。我们深知每一个案件背后都承载着当事人的信任与期望，因此始终以精益求精的态度对待每一项委托。</p>
-            </div>
+        {% if lawyer_full_intro_html %}
+        <div class="about-markdown-content">
+            {{ lawyer_full_intro_html | safe }}
         </div>
+        {% else %}
+        <div class="about-intro-text">
+            <h2>关于 {{ site_name }}</h2>
+            <p>{{ site_name }}由 {{ lawyer_name }} {{ lawyer_title }}领衔，汇集经验丰富的执业律师，以团队协作模式为客户提供全方位法律服务。</p>
+            <p>团队成员在建设工程、民商事诉讼、刑事辩护、政企法律顾问等领域积累了丰富的实务经验，始终秉持"专业立身、诚信为本"的执业理念，以严谨的工作态度和高效的协作机制，为每一位客户提供量身定制的法律解决方案。</p>
+        </div>
+        {% endif %}
     </div>
 </section>
+
+{% if qualifications or honors %}
+<section class="section cert-showcase-section">
+    <div class="container">
+        {% if qualifications %}
+        <h2 class="section-title">执业资质</h2>
+        <div class="cert-list-grid">
+            {% for cert in qualifications %}
+            <div class="cert-card">
+                {% if cert.image_path %}
+                <div class="cert-card-img"><img src="{{ url_for('static', filename=cert.image_path) }}" alt="{{ cert.title }}" loading="lazy"></div>
+                {% endif %}
+                <div class="cert-card-body">
+                    <h3>{{ cert.title }}</h3>
+                    <p class="cert-issuer">{{ cert.issuer }}{% if cert.date %} · {{ cert.date }}{% endif %}</p>
+                    {% if cert.description %}<p class="cert-desc">{{ cert.description }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if honors %}
+        <h2 class="section-title" style="margin-top:3rem;">荣誉表彰</h2>
+        <div class="cert-list-grid">
+            {% for cert in honors %}
+            <div class="cert-card">
+                {% if cert.image_path %}
+                <div class="cert-card-img"><img src="{{ url_for('static', filename=cert.image_path) }}" alt="{{ cert.title }}" loading="lazy"></div>
+                {% endif %}
+                <div class="cert-card-body">
+                    <h3>{{ cert.title }}</h3>
+                    <p class="cert-issuer">{{ cert.issuer }}{% if cert.date %} · {{ cert.date }}{% endif %}</p>
+                    {% if cert.description %}<p class="cert-desc">{{ cert.description }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
 
 {% endblock %}

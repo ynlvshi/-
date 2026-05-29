@@ -7,7 +7,7 @@ from pathlib import Path
 HOST = "43.135.112.189"
 USER = "a4c3799d"
 PASSWORD = "f23022d2"
-PROJECT_DIR = Path(r"C:\Users\ynlvs\Desktop\法律网站")
+PROJECT_DIR = Path(r"C:\Users\ynlvs\Desktop\法律网站1")
 REMOTE_DIR = "/var/www/ynlawyers"
 
 # 要上传的文件/目录
@@ -90,8 +90,8 @@ def main():
         "apt-get update -y",
         "apt-get install -y python3 python3-pip python3-venv nginx",
         f"cd {REMOTE_DIR} && pip3 install --break-system-packages -r requirements.txt",
-        f"cp {REMOTE_DIR}/deploy/ynlawyers-nginx.conf /etc/nginx/sites-available/ynlawyers.com",
-        f"ln -sf /etc/nginx/sites-available/ynlawyers.com /etc/nginx/sites-enabled/",
+        f"cp {REMOTE_DIR}/deploy/ynlawyers-nginx.conf /etc/nginx/sites-available/lawyer01.com",
+        f"ln -sf /etc/nginx/sites-available/lawyer01.com /etc/nginx/sites-enabled/",
         "rm -f /etc/nginx/sites-enabled/default",
         "nginx -t && systemctl reload nginx",
         f"cp {REMOTE_DIR}/deploy/ynlawyers.service /etc/systemd/system/",
@@ -113,8 +113,8 @@ def main():
 
     ssh.close()
     print("\n=== 部署完成！===")
-    print("  前台: http://ynlawyers.com")
-    print("  后台: http://ynlawyers.com/admin")
+    print("  前台: http://lawyer01.com")
+    print("  后台: http://lawyer01.com/admin")
 
 
 if __name__ == "__main__":

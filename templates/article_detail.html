@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ article.title }} - {% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
 {% block meta_desc %}{{ meta_desc if meta_desc else article.summary }}{% endblock %}
 {% block meta_keywords %}{{ article.category }},法律文章,{{ lawyer_name }},昆明律师{% endblock %}
 {% block og_title %}{{ article.title }}{% endblock %}
@@ -92,7 +92,7 @@
     },
     "publisher": {
         "@type": "LegalService",
-        "name": "{{ lawyer_name }}律师团队"
+        "name": "{{ site_name }}"
     },
     "description": "{{ meta_desc if meta_desc else article.summary }}",
     "url": "{{ request.url }}"

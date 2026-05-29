@@ -1,5 +1,5 @@
 """
-邹卫华律师工作室 - Flask 后端
+云律师团队 - Flask 后端
 律师个人展示 + 文章博客 + 留言功能 + FAQ + 团队
 """
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, send_from_directory
@@ -195,7 +195,7 @@ class FAQ(db.Model):
 @app.route('/')
 def index():
     articles = Article.query.filter_by(is_published=True).order_by(Article.created_at.desc()).limit(6).all()
-    site_name = SiteSetting.get('site_name', '邹卫华律师工作室')
+    site_name = SiteSetting.get('site_name', '云律师团队')
     lawyer_intro = SiteSetting.get('lawyer_intro', '')
     lawyer_title = SiteSetting.get('lawyer_title', '执业律师')
     hero_years = SiteSetting.get('hero_years', '15+')
@@ -215,7 +215,7 @@ def index():
 
 @app.route('/about')
 def about():
-    site_name = SiteSetting.get('site_name', '邹卫华律师工作室')
+    site_name = SiteSetting.get('site_name', '云律师团队')
     lawyer_title = SiteSetting.get('lawyer_title', '执业律师')
     lawyer_full_intro = SiteSetting.get('lawyer_full_intro', '')
     lawyer_full_intro_html = render_markdown(lawyer_full_intro) if lawyer_full_intro else ''
@@ -966,7 +966,7 @@ def init_database():
                         pass
 
         defaults = {
-            'site_name': '邹卫华律师工作室',
+            'site_name': '云律师 团队',
             'site_description': '云南 · 专业 · 诚信 · 高效',
             'lawyer_name': '邹卫华',
             'lawyer_title': '执业律师',
@@ -1110,8 +1110,8 @@ def init_database():
         if not Lawyer.query.first():
             sample_lawyers = [
                 {'name': '邹卫华', 'title': '权益合伙人', 'specialty': '建设工程、政企法律顾问、民商事诉讼', 'intro': '执业 15 年以上，专注于建设工程法律纠纷及政企法律顾问服务，累计代理案件 500 余件。', 'sort_order': 0},
-                {'name': '李律师', 'title': '合伙人律师', 'specialty': '刑事辩护、公司法务', 'intro': '法学硕士，曾在检察机关工作多年，转任律师后专注刑事辩护和企业法律风险防控。', 'sort_order': 1},
-                {'name': '王律师', 'title': '执业律师', 'specialty': '婚姻家庭、遗产继承、劳动争议', 'intro': '执业多年，擅长婚姻家事及劳动争议案件，以调解见长，累计调解成功率超过 80%。', 'sort_order': 2},
+                {'name': '王律师', 'title': '执业律师', 'specialty': '婚姻家庭、遗产继承、劳动争议', 'intro': '执业多年，擅长婚姻家事及劳动争议案件，以调解见长，累计调解成功率超过 80%。', 'sort_order': 1},
+                {'name': '杨云', 'title': '执业律师', 'specialty': '民商事诉讼、公司法务、合同纠纷', 'intro': '法学硕士，执业多年，专注民商事争议解决与企业法律顾问服务，以严谨细致的办案风格赢得客户信赖。', 'sort_order': 2},
             ]
             for data in sample_lawyers:
                 db.session.add(Lawyer(**data))
@@ -1161,7 +1161,7 @@ def init_database():
 
         if not FAQ.query.first():
             sample_faqs = [
-                {'question': '建设工程合同纠纷应该找什么样的律师？', 'answer': '建议找有建设工程领域专业经验的律师。建设工程纠纷涉及工程款结算、工期索赔、质量鉴定等专业问题，需要律师同时具备法律知识和工程行业常识。邹卫华律师团队深耕建设工程领域15年以上，累计为施工企业追回工程款超千万元。', 'category': '建设工程', 'sort_order': 0},
+                {'question': '建设工程合同纠纷应该找什么样的律师？', 'answer': '建议找有建设工程领域专业经验的律师。建设工程纠纷涉及工程款结算、工期索赔、质量鉴定等专业问题，需要律师同时具备法律知识和工程行业常识。云律师团队深耕建设工程领域15年以上，累计为施工企业追回工程款超千万元。', 'category': '建设工程', 'sort_order': 0},
                 {'question': '拖欠工程款怎么办？', 'answer': '首先收集合同、工程验收单、结算资料等证据；其次向发包方发出书面催告函；协商无果的，可向法院起诉并申请财产保全，查封对方财产。建议尽早委托专业律师介入，避免超过诉讼时效。', 'category': '建设工程', 'sort_order': 1},
                 {'question': '离婚财产如何分割？', 'answer': '婚后取得的财产原则上均等分割。但需注意：一方婚前财产归个人；继承或赠与明确给一方的归个人；一方隐匿、转移财产的可以少分或不分。建议提前咨询律师了解自身合法权益。', 'category': '婚姻家庭', 'sort_order': 2},
                 {'question': '被刑事拘留后家属应该怎么做？', 'answer': '第一时间委托专业刑事律师介入。律师可在侦查阶段会见当事人、了解案情、申请取保候审、提供法律咨询。侦查阶段是刑事辩护的黄金窗口期，尽早委托律师至关重要。', 'category': '刑事辩护', 'sort_order': 3},
@@ -1182,6 +1182,7 @@ def init_database():
 
 @app.context_processor
 def inject_globals():
+    site_name = SiteSetting.get('site_name', '云律师团队')
     phone = SiteSetting.get('contact_phone', '')
     address = SiteSetting.get('contact_address', '')
     icp = SiteSetting.get('icp_beian', '')
@@ -1192,6 +1193,7 @@ def inject_globals():
     wechat_qrcode = SiteSetting.get('wechat_qrcode', '')
     return dict(
         now=lambda: datetime.now(),
+        site_name=site_name,
         phone=phone, address=address, icp=icp,
         lawyer_name=lawyer_name, lawyer_title=lawyer_title,
         site_description=site_description, lawyer_avatar=lawyer_avatar,
@@ -1237,10 +1239,10 @@ def server_error(e):
 if __name__ == '__main__':
     if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
         print("=" * 40)
-        print("   邹卫华律师工作室")
+        print("   云律师团队")
         print("=" * 40)
         init_database()
     debug_mode = os.environ.get('FLASK_DEBUG', '0') == '1'
     if debug_mode:
-        print("⚠ DEBUG 模式已开启，生产环境请勿使用！")
+        print("DEBUG 模式已开启，生产环境请勿使用！")
     app.run(debug=debug_mode, host='0.0.0.0', port=5000)

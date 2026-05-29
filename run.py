@@ -12,7 +12,7 @@ from waitress import serve
 from app import app, init_database
 
 print("=" * 50)
-print("   邹卫华律师工作室 - 生产模式启动")
+print("   云律师团队 - 生产模式启动")
 print("   前台: http://localhost:5000")
 print("   后台: http://localhost:5000/admin")
 print("=" * 50)

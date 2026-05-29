@@ -1,12 +1,12 @@
 #!/bin/bash
 # ============================================
-# 邹卫华律师团队网站 - 服务器一键部署脚本
+# 云律师团队网站 - 服务器一键部署脚本
 # 适用: Ubuntu 20.04+ / 22.04+
 # ============================================
 set -e
 
 echo "========================================"
-echo "   邹卫华律师团队网站 - 部署脚本"
+echo "   云律师团队网站 - 部署脚本"
 echo "========================================"
 
 # ---- 1. 更新系统 ----
@@ -30,8 +30,8 @@ pip3 install --break-system-packages -r requirements.txt
 
 # ---- 5. 配置 Nginx ----
 echo "[5/6] 配置 Nginx..."
-cp deploy/ynlawyers-nginx.conf /etc/nginx/sites-available/ynlawyers.com
-ln -sf /etc/nginx/sites-available/ynlawyers.com /etc/nginx/sites-enabled/
+cp deploy/ynlawyers-nginx.conf /etc/nginx/sites-available/lawyer01.com
+ln -sf /etc/nginx/sites-available/lawyer01.com /etc/nginx/sites-enabled/
 # 删除默认站点
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
@@ -50,14 +50,14 @@ echo "   部署完成！"
 echo "========================================"
 echo ""
 echo "下一步 - 配置 SSL 证书:"
-echo "  certbot --nginx -d ynlawyers.com -d www.ynlawyers.com"
+echo "  certbot --nginx -d lawyer01.com -d www.lawyer01.com"
 echo ""
 echo "访问地址:"
-echo "  http://ynlawyers.com"
+echo "  http://lawyer01.com"
 echo "  http://43.135.112.189"
 echo ""
 echo "后台管理:"
-echo "  http://ynlawyers.com/admin"
+echo "  http://lawyer01.com/admin"
 echo "  账号: admin / admin123"
 echo ""
 echo "检查服务状态:"

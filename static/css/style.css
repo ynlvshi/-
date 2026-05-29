@@ -995,49 +995,26 @@ img { max-width: 100%; height: auto; }
     color: var(--text-light);
 }
 
-/* ============ 关于团队 ============ */
-.team-intro-section { padding: 5rem 0; }
-.team-intro-layout {
-    display: flex;
-    gap: 4rem;
-    align-items: flex-start;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-.team-intro-side { flex-shrink: 0; width: 280px; }
-.team-intro-avatar {
-    width: 200px;
-    height: 260px;
-    border-radius: 2px;
-    background: linear-gradient(180deg, #e8ecf1 0%, #d5dbe3 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 1.5rem;
-}
-.team-intro-side h2 { font-size: 1.5rem; color: var(--primary); margin-bottom: 0.3rem; }
-.team-intro-side .team-intro-title {
-    font-size: 0.95rem;
-    color: var(--accent);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-.team-intro-contact { margin-top: 1.5rem; }
-.team-intro-contact p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.4rem; }
-.team-intro-main { flex: 1; }
-.team-intro-main h3 {
-    font-size: 1.4rem;
-    color: var(--primary);
-    margin-bottom: 1rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 2px solid var(--border);
-}
-.team-intro-main p { font-size: 1rem; color: var(--text); line-height: 1.9; margin-bottom: 1rem; }
-.team-intro-main ul { margin: 1rem 0 1.5rem 1.5rem; }
-.team-intro-main li { margin-bottom: 0.5rem; line-height: 1.6; }
+/* ============ 关于我们 ============ */
+.about-intro-section { padding: 3rem 0; }
+.about-intro-text { max-width: 860px; margin: 0 auto; }
+.about-intro-text h2 { font-size: 1.8rem; color: var(--primary); margin-bottom: 1.5rem; }
+.about-intro-text p { font-size: 1.05rem; color: var(--text); line-height: 2; margin-bottom: 1.2rem; }
+.about-markdown-content { max-width: 860px; margin: 0 auto; }
+.about-markdown-content h2 { font-size: 1.8rem; color: var(--primary); margin: 2rem 0 1rem; }
+.about-markdown-content h3 { font-size: 1.3rem; color: var(--primary); margin: 1.5rem 0 0.8rem; }
+.about-markdown-content p { font-size: 1.05rem; color: var(--text); line-height: 2; margin-bottom: 1rem; }
+.about-markdown-content ul { margin: 0.8rem 0 1.5rem 1.5rem; }
+.about-markdown-content li { margin-bottom: 0.5rem; line-height: 1.7; }
+.cert-showcase-section { padding: 2rem 0 4rem; }
+.cert-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; max-width: 960px; margin: 1.5rem auto 0; }
+.cert-card { display: flex; gap: 1.2rem; background: var(--card-bg); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow-sm); align-items: flex-start; }
+.cert-card-img { flex-shrink: 0; width: 80px; height: 110px; border-radius: 4px; overflow: hidden; background: var(--bg); }
+.cert-card-img img { width: 100%; height: 100%; object-fit: cover; }
+.cert-card-body { flex: 1; }
+.cert-card-body h3 { font-size: 1.05rem; color: var(--primary); margin-bottom: 0.3rem; }
+.cert-issuer { font-size: 0.85rem; color: var(--accent); margin-bottom: 0.4rem; }
+.cert-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
 
 /* ============ 案例筛选标签 ============ */
 .case-filters {
@@ -1102,7 +1079,6 @@ img { max-width: 100%; height: auto; }
     .services-split-grid { grid-template-columns: 1fr; }
     .hero-modern-inner { gap: 2rem; }
     .hero-modern-left h1 { font-size: 2.2rem; }
-    .team-intro-layout { gap: 2rem; }
     .contact-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
@@ -1127,9 +1103,6 @@ img { max-width: 100%; height: auto; }
     .govt-advantages-grid { grid-template-columns: repeat(2, 1fr); }
     .client-types-grid { grid-template-columns: 1fr; }
     .services-split-grid { grid-template-columns: 1fr; }
-    .team-intro-layout { flex-direction: column; gap: 2rem; }
-    .team-intro-side { width: 100%; text-align: center; }
-    .team-intro-avatar { margin: 0 auto 1.5rem; width: 160px; height: 210px; }
     .team-full-card { flex-direction: column; text-align: center; }
     .team-contact { justify-content: center; flex-wrap: wrap; }
     .lawyer-detail { flex-direction: column; text-align: center; padding: 1.5rem; }
