@@ -1178,6 +1178,41 @@ def init_database():
         print("    管理员账号: admin / admin123")
 
 
+# ============ 数据库迁移 ============
+
+def migrate_database():
+    """部署时执行：迁移旧数据到新版本，仅修改默认值，不覆盖用户自定义设置"""
+    with app.app_context():
+        # 1. site_name：旧默认值 → 新默认值
+        s = SiteSetting.query.filter_by(key='site_name').first()
+        if s and s.value in ('邹卫华律师工作室', '邹卫华律师团队'):
+            s.value = '云律师 团队'
+
+        # 2. icp_beian：如果为空则填入
+        s = SiteSetting.query.filter_by(key='icp_beian').first()
+        if not s or not s.value:
+            if s:
+                s.value = '滇ICP备2026006037号-2'
+            else:
+                db.session.add(SiteSetting(key='icp_beian', value='滇ICP备2026006037号-2'))
+
+        # 3. 删除 李律师，添加 杨云
+        li = Lawyer.query.filter_by(name='李律师').first()
+        if li:
+            db.session.delete(li)
+
+        if not Lawyer.query.filter_by(name='杨云').first():
+            db.session.add(Lawyer(
+                name='杨云', title='执业律师',
+                specialty='民商事诉讼、公司法务、合同纠纷',
+                intro='法学硕士，执业多年，专注民商事争议解决与企业法律顾问服务，以严谨细致的办案风格赢得客户信赖。',
+                sort_order=2, is_visible=True
+            ))
+
+        db.session.commit()
+        print("[OK] 数据库迁移完成！")
+
+
 # ============ 全局模板上下文 ============
 
 @app.context_processor

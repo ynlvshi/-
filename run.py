@@ -9,7 +9,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 os.environ['PYTHONIOENCODING'] = 'utf-8'
 
 from waitress import serve
-from app import app, init_database
+from app import app, init_database, migrate_database
 
 print("=" * 50)
 print("   云律师团队 - 生产模式启动")
@@ -18,5 +18,6 @@ print("   后台: http://localhost:5000/admin")
 print("=" * 50)
 
 init_database()
+migrate_database()
 
 serve(app, host='0.0.0.0', port=5000, threads=4, channel_timeout=120)
