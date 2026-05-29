@@ -1,0 +1,65 @@
+{% extends "admin_base.html" %}
+{% block title %}{{ '编辑案例' if case else '添加案例' }} - 管理后台{% endblock %}
+{% block admin_title %}{{ '编辑案例' if case else '添加案例' }}{% endblock %}
+{% block admin_content %}
+<form method="POST" class="admin-form">
+    <div class="form-group">
+        <label for="title">案例标题 <span class="required">*</span></label>
+        <input type="text" id="title" name="title" value="{{ case.title if case else '' }}" required>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="case_type">案件类型</label>
+            <select id="case_type" name="case_type">
+                {% for t in ['建设工程', '政企服务', '民商事', '刑事辩护', '公司法务', '婚姻家庭', '劳动争议', '其他'] %}
+                <option value="{{ t }}" {{ 'selected' if case and case.case_type == t else '' }}>{{ t }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="case_status">案件结果</label>
+            <select id="case_status" name="case_status">
+                {% for s in ['胜诉', '调解成功', '不起诉', '缓刑', '减刑', '和解', '服务中', '其他'] %}
+                <option value="{{ s }}" {{ 'selected' if case and case.case_status == s else '' }}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="description">案情简介 <span class="required">*</span></label>
+        <textarea id="description" name="description" rows="4" required>{{ case.description if case else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="process">办案过程</label>
+        <textarea id="process" name="process" rows="4" placeholder="描述具体的办案步骤和过程">{{ case.process if case else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="legal_analysis">法律要点分析</label>
+        <textarea id="legal_analysis" name="legal_analysis" rows="4" placeholder="分析案件涉及的法律要点和关键问题">{{ case.legal_analysis if case else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="result">案件结果</label>
+        <textarea id="result" name="result" rows="3">{{ case.result if case else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="client_testimonial">客户评价（脱敏）</label>
+        <textarea id="client_testimonial" name="client_testimonial" rows="2" placeholder="客户的真实评价，注意保护隐私">{{ case.client_testimonial if case else '' }}</textarea>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="sort_order">排序</label>
+            <input type="number" id="sort_order" name="sort_order" value="{{ case.sort_order if case else 0 }}">
+        </div>
+        <div class="form-group">
+            <label class="checkbox-label">
+                <input type="checkbox" name="is_published" {{ 'checked' if (case and case.is_published) or not case else '' }}>
+                发布显示
+            </label>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="/admin/cases" class="btn btn-outline">取消</a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}案例展示 - {% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>案例展示</h1>
+        <p>以案说法 · 专业赢得信赖</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        {% if case_types %}
+        <div class="case-filters">
+            <a href="/cases" class="case-filter-tag {% if not current_type %}active{% endif %}">全部案例</a>
+            {% for t in case_types %}
+            <a href="/cases?type={{ t }}" class="case-filter-tag {% if current_type == t %}active{% endif %}">{{ t }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if cases %}
+        <div class="cases-grid">
+            {% for case in cases %}
+            <div class="case-card">
+                <div class="case-card-header">
+                    <span class="case-type-badge">{{ case.case_type }}</span>
+                    <span class="case-status">{{ case.case_status }}</span>
+                </div>
+                <h3><a href="/cases/{{ case.id }}">{{ case.title }}</a></h3>
+                <p class="case-desc">{{ case.description[:120] }}{% if case.description|length > 120 %}...{% endif %}</p>
+                <a href="/cases/{{ case.id }}" class="read-more">查看详情 →</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">暂无相关案例</div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

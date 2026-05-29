@@ -1,0 +1,45 @@
+{% extends "admin_base.html" %}
+{% block title %}案例管理 - 管理后台{% endblock %}
+{% block admin_title %}案例管理{% endblock %}
+{% block admin_content %}
+<div class="admin-toolbar">
+    <span></span>
+    <a href="/admin/cases/add" class="btn btn-primary btn-sm">+ 添加案例</a>
+</div>
+
+{% if cases %}
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>类型</th>
+            <th>状态</th>
+            <th>发布</th>
+            <th>排序</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for case in cases %}
+        <tr>
+            <td>{{ case.id }}</td>
+            <td>{{ case.title[:30] }}{% if case.title|length > 30 %}...{% endif %}</td>
+            <td>{{ case.case_type }}</td>
+            <td><span class="badge {{ 'badge-success' if case.case_status == '胜诉' else 'badge-warning' }}">{{ case.case_status }}</span></td>
+            <td>{{ '✅' if case.is_published else '❌' }}</td>
+            <td>{{ case.sort_order }}</td>
+            <td>{{ case.created_at.strftime('%Y-%m-%d') if case.created_at else '' }}</td>
+            <td class="action-cell">
+                <a href="/admin/cases/edit/{{ case.id }}" class="btn-sm btn-edit">编辑</a>
+                <a href="/admin/cases/delete/{{ case.id }}" class="btn-sm btn-delete" onclick="return confirm('确定删除？')">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty-state">暂无案例，点击右上角添加</div>
+{% endif %}
+{% endblock %}

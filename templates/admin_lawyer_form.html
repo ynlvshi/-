@@ -1,0 +1,49 @@
+{% extends "admin_base.html" %}
+{% block title %}{% if lawyer %}编辑律师{% else %}添加律师{% endif %} - 管理后台{% endblock %}
+{% block admin_title %}{% if lawyer %}编辑律师信息{% else %}添加新律师{% endif %}{% endblock %}
+{% block admin_content %}
+<form method="POST" class="admin-form">
+    <div class="form-row">
+        <div class="form-group">
+            <label for="name">姓名 <span class="required">*</span></label>
+            <input type="text" id="name" name="name" required value="{{ lawyer.name if lawyer else '' }}" placeholder="请输入律师姓名">
+        </div>
+        <div class="form-group">
+            <label for="title">职称 <span class="required">*</span></label>
+            <input type="text" id="title" name="title" required value="{{ lawyer.title if lawyer else '' }}" placeholder="例如：权益合伙人、合伙人律师">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="specialty">擅长领域</label>
+        <input type="text" id="specialty" name="specialty" value="{{ lawyer.specialty if lawyer else '' }}" placeholder="例如：民商事诉讼、刑事辩护、公司法务">
+    </div>
+    <div class="form-group">
+        <label for="intro">简介</label>
+        <textarea id="intro" name="intro" rows="3" placeholder="律师个人简介">{{ lawyer.intro if lawyer else '' }}</textarea>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="phone">电话</label>
+            <input type="text" id="phone" name="phone" value="{{ lawyer.phone if lawyer else '' }}" placeholder="联系电话">
+        </div>
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            <input type="email" id="email" name="email" value="{{ lawyer.email if lawyer else '' }}" placeholder="电子邮箱">
+        </div>
+        <div class="form-group">
+            <label for="sort_order">排序</label>
+            <input type="number" id="sort_order" name="sort_order" value="{{ lawyer.sort_order if lawyer else '0' }}" min="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="checkbox-label">
+            <input type="checkbox" name="is_active" {% if not lawyer or lawyer.is_active %}checked{% endif %}>
+            在职
+        </label>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="/admin/lawyers" class="btn btn-outline">取消</a>
+    </div>
+</form>
+{% endblock %}

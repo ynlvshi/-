@@ -1,0 +1,183 @@
+{% extends "admin_base.html" %}
+{% block title %}网站设置 - 管理后台{% endblock %}
+{% block admin_title %}网站设置{% endblock %}
+{% block admin_content %}
+<form method="POST" class="admin-form">
+    <fieldset>
+        <legend>站点信息</legend>
+        <div class="form-group">
+            <label for="site_name">网站名称</label>
+            <input type="text" id="site_name" name="site_name" value="{{ SiteSetting.get('site_name', '') }}">
+        </div>
+        <div class="form-group">
+            <label for="site_description">网站描述（副标题）</label>
+            <input type="text" id="site_description" name="site_description" value="{{ SiteSetting.get('site_description', '') }}">
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>律师信息</legend>
+        <div class="form-group">
+            <label for="lawyer_name">律师姓名</label>
+            <input type="text" id="lawyer_name" name="lawyer_name" value="{{ SiteSetting.get('lawyer_name', '') }}">
+        </div>
+        <div class="form-group">
+            <label for="lawyer_title">律师职称</label>
+            <input type="text" id="lawyer_title" name="lawyer_title" value="{{ SiteSetting.get('lawyer_title', '') }}" placeholder="例如：执业律师、权益合伙人">
+        </div>
+        <div class="form-group">
+            <label>律师头像</label>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem;">
+                <div id="avatar-preview" style="width:80px;height:80px;border-radius:50%;overflow:hidden;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:2rem;border:2px solid var(--border);">
+                    {% set av = SiteSetting.get('lawyer_avatar', '') %}
+                    {% if av %}<img src="{{ url_for('static', filename=av) }}" style="width:100%;height:100%;object-fit:cover;">{% else %}👤{% endif %}
+                </div>
+                <div>
+                    <input type="file" id="avatar-file" accept="image/*" style="font-size:.85rem;">
+                    <input type="hidden" name="lawyer_avatar" id="lawyer_avatar" value="{{ SiteSetting.get('lawyer_avatar', '') }}">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lawyer_intro">简介（首页显示）</label>
+            <textarea id="lawyer_intro" name="lawyer_intro" rows="3">{{ SiteSetting.get('lawyer_intro', '') }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="lawyer_full_intro">详细介绍（关于我页面，支持 Markdown）</label>
+            <textarea id="lawyer_full_intro" name="lawyer_full_intro" rows="12">{{ SiteSetting.get('lawyer_full_intro', '') }}</textarea>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>首页统计数字</legend>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="hero_years">执业年限</label>
+                <input type="text" id="hero_years" name="hero_years" value="{{ SiteSetting.get('hero_years', '15+') }}" placeholder="15+">
+            </div>
+            <div class="form-group">
+                <label for="hero_cases">代理案件</label>
+                <input type="text" id="hero_cases" name="hero_cases" value="{{ SiteSetting.get('hero_cases', '500+') }}" placeholder="500+">
+            </div>
+            <div class="form-group">
+                <label for="hero_satisfaction">满意率</label>
+                <input type="text" id="hero_satisfaction" name="hero_satisfaction" value="{{ SiteSetting.get('hero_satisfaction', '98%') }}" placeholder="98%">
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>联系方式</legend>
+        <div class="form-group">
+            <label for="contact_phone">联系电话</label>
+            <input type="text" id="contact_phone" name="contact_phone" value="{{ SiteSetting.get('contact_phone', '') }}">
+        </div>
+        <div class="form-group">
+            <label for="contact_email">电子邮箱</label>
+            <input type="email" id="contact_email" name="contact_email" value="{{ SiteSetting.get('contact_email', '') }}">
+        </div>
+        <div class="form-group">
+            <label for="contact_address">地址</label>
+            <input type="text" id="contact_address" name="contact_address" value="{{ SiteSetting.get('contact_address', '') }}">
+        </div>
+        <div class="form-group">
+            <label>微信二维码</label>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.5rem;">
+                <div id="qrcode-preview" style="width:100px;height:100px;border-radius:8px;overflow:hidden;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:#999;border:2px solid var(--border);">
+                    {% set qr = SiteSetting.get('wechat_qrcode', '') %}
+                    {% if qr %}<img src="{{ url_for('static', filename=qr) }}" style="width:100%;height:100%;object-fit:contain;">{% else %}未上传{% endif %}
+                </div>
+                <div>
+                    <input type="file" id="qrcode-file" accept="image/*" style="font-size:.85rem;">
+                    <input type="hidden" name="wechat_qrcode" id="wechat_qrcode" value="{{ SiteSetting.get('wechat_qrcode', '') }}">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>管理员账号</legend>
+        <div class="form-group">
+            <label for="admin_username">用户名</label>
+            <input type="text" id="admin_username" name="admin_username" value="{{ SiteSetting.get('admin_username', 'admin') }}">
+        </div>
+        <div class="form-group">
+            <label for="admin_password">密码（留空则不修改）</label>
+            <input type="password" id="admin_password" name="admin_password" placeholder="输入新密码以修改">
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>备案信息</legend>
+        <div class="form-group">
+            <label for="icp_beian">ICP备案号</label>
+            <input type="text" id="icp_beian" name="icp_beian" value="{{ SiteSetting.get('icp_beian', '') }}" placeholder="例如：滇ICP备XXXXXX号">
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>统计分析</legend>
+        <div class="form-group">
+            <label for="baidu_tongji_id">百度统计 ID</label>
+            <input type="text" id="baidu_tongji_id" name="baidu_tongji_id" value="{{ SiteSetting.get('baidu_tongji_id', '') }}" placeholder="例如：abc123def456">
+            <small style="color:var(--text-muted);">在百度统计后台获取，填入后自动启用页面访问统计</small>
+        </div>
+        <div class="form-group">
+            <label for="google_analytics_id">Google Analytics ID</label>
+            <input type="text" id="google_analytics_id" name="google_analytics_id" value="{{ SiteSetting.get('google_analytics_id', '') }}" placeholder="例如：G-XXXXXXXXXX">
+            <small style="color:var(--text-muted);">Google Analytics 4 衡量 ID，格式为 G-XXXXXXXXXX</small>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>微信推送通知</legend>
+        <div class="form-group">
+            <label for="pushplus_token">PushPlus Token</label>
+            <input type="text" id="pushplus_token" name="pushplus_token" value="{{ SiteSetting.get('pushplus_token', '') }}" placeholder="填入 PushPlus Token，新留言自动推送到微信">
+            <small style="color:var(--text-muted);">获取方式：关注「PushPlus」公众号 → 推送加 → 一对一推送 → 复制 token</small>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>AI 聊天设置</legend>
+        <div class="form-group">
+            <label for="deepseek_api_key">DeepSeek API Key</label>
+            <input type="password" id="deepseek_api_key" name="deepseek_api_key" value="{{ SiteSetting.get('deepseek_api_key', '') }}" placeholder="sk-xxxxxxxx">
+            <small style="color:var(--text-muted);">获取地址: platform.deepseek.com → API Keys</small>
+        </div>
+        <div class="form-group">
+            <label for="chat_system_prompt">AI 角色提示词（可选）</label>
+            <textarea id="chat_system_prompt" name="chat_system_prompt" rows="3" placeholder="留空使用默认提示词">{{ SiteSetting.get('chat_system_prompt', '') }}</textarea>
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存设置</button>
+    </div>
+</form>
+
+<script>
+document.getElementById('avatar-file').addEventListener('change', function() {
+    var formData = new FormData();
+    formData.append('file', this.files[0]);
+    fetch('/admin/upload_avatar', { method: 'POST', body: formData })
+        .then(r => r.json()).then(d => {
+            if (d.success) {
+                document.getElementById('lawyer_avatar').value = d.path;
+                document.getElementById('avatar-preview').innerHTML = '<img src="/static/' + d.path + '" style="width:100%;height:100%;object-fit:cover;">';
+            } else { alert(d.error); }
+        });
+});
+document.getElementById('qrcode-file').addEventListener('change', function() {
+    var formData = new FormData();
+    formData.append('file', this.files[0]);
+    fetch('/admin/upload_avatar', { method: 'POST', body: formData })
+        .then(r => r.json()).then(d => {
+            if (d.success) {
+                document.getElementById('wechat_qrcode').value = d.path;
+                document.getElementById('qrcode-preview').innerHTML = '<img src="/static/' + d.path + '" style="width:100%;height:100%;object-fit:contain;">';
+            } else { alert(d.error); }
+        });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}法律文章 - {% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>法律文章</h1>
+        <p>法律知识、实务经验与最新资讯</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="article-layout">
+            <div class="article-main">
+                {% if articles %}
+                {% for article in articles %}
+                <article class="article-item">
+                    <div class="article-item-category">{{ article.category }}</div>
+                    <h2><a href="/articles/{{ article.id }}">{{ article.title }}</a></h2>
+                    <p class="article-item-summary">{{ article.summary }}</p>
+                    <div class="article-item-meta">
+                        <span>{{ article.author }}</span>
+                        <span>{{ article.created_at.strftime('%Y-%m-%d') if article.created_at else '' }}</span>
+                        <span>👁 {{ article.view_count }} 次阅读</span>
+                    </div>
+                </article>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <p>暂无文章</p>
+                </div>
+                {% endif %}
+            </div>
+            <aside class="article-sidebar">
+                <div class="sidebar-card">
+                    <h3>文章分类</h3>
+                    <ul class="category-list">
+                        <li><a href="/articles" class="{% if not current_category %}active{% endif %}">全部</a></li>
+                        {% for cat in categories %}
+                        <li><a href="/articles?category={{ cat }}" class="{% if current_category == cat %}active{% endif %}">{{ cat }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

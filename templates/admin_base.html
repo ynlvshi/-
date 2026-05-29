@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}管理后台{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <a href="/admin" class="admin-logo">⚖ 管理后台</a>
+            </div>
+            <nav class="admin-nav">
+                <a href="/admin" class="admin-nav-item">📊 仪表盘</a>
+                <a href="/admin/articles" class="admin-nav-item">📝 文章管理</a>
+                <a href="/admin/cases" class="admin-nav-item">📋 案例管理</a>
+                <a href="/admin/faq" class="admin-nav-item">❓ FAQ 管理</a>
+                <a href="/admin/lawyers" class="admin-nav-item">👥 律师团队</a>
+                <a href="/admin/certificates" class="admin-nav-item">🏆 荣誉证书</a>
+                <a href="/admin/messages" class="admin-nav-item">💬 留言管理</a>
+                <a href="/admin/settings" class="admin-nav-item">⚙ 网站设置</a>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <a href="/" target="_blank" class="admin-nav-item">🌐 访问前台</a>
+                <a href="/admin/logout" class="admin-nav-item">🚪 退出登录</a>
+            </div>
+        </aside>
+        <main class="admin-main">
+            <div class="admin-header">
+                <h2>{% block admin_title %}仪表盘{% endblock %}</h2>
+            </div>
+            <div class="admin-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block admin_content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

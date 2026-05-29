@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ case.title }} - 案例详情{% endblock %}
+{% block meta_desc %}{{ case.description[:150] if case.description else case.title }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-bar">
+    <div class="container">
+        <a href="/">首页</a> <span class="breadcrumb-sep">›</span>
+        <a href="/cases">案例展示</a> <span class="breadcrumb-sep">›</span>
+        <span>{{ case.title[:20] }}...</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <div class="article-content">
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <span class="article-category">{{ case.case_type }}</span>
+                <span class="article-category" style="background:#27ae60;">{{ case.case_status }}</span>
+            </div>
+
+            <h1 style="font-size:1.6rem;color:var(--primary);margin-bottom:1.5rem;">{{ case.title }}</h1>
+
+            <h2>📋 案情简介</h2>
+            <p style="line-height: 1.9; white-space: pre-wrap;">{{ case.description }}</p>
+
+            {% if case.process %}
+            <h2>🔍 办案过程</h2>
+            <p style="line-height: 1.9; white-space: pre-wrap;">{{ case.process }}</p>
+            {% endif %}
+
+            {% if case.legal_analysis %}
+            <h2>⚖ 法律要点分析</h2>
+            <div style="background: #f8f4e8; border-left: 4px solid var(--gold); padding: 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0;">
+                <p style="line-height: 1.9; white-space: pre-wrap;">{{ case.legal_analysis }}</p>
+            </div>
+            {% endif %}
+
+            {% if case.result %}
+            <h2>✅ 案件结果</h2>
+            <div style="background: #f0fdf4; border-left: 4px solid #27ae60; padding: 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0;">
+                <p style="line-height: 1.9; white-space: pre-wrap;">{{ case.result }}</p>
+            </div>
+            {% endif %}
+
+            {% if case.client_testimonial %}
+            <h2>💬 客户评价</h2>
+            <div style="background: #f0f4ff; border-left: 4px solid #2c5282; padding: 1.2rem; border-radius: 0 8px 8px 0; margin: 1rem 0; font-style:italic;">
+                <p style="line-height: 1.9;">"{{ case.client_testimonial }}"</p>
+            </div>
+            {% endif %}
+
+            <!-- 相关案例 -->
+            {% if related_cases %}
+            <div class="related-section" style="margin-top:2rem;">
+                <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);">📂 相关案例</h3>
+                <div class="related-grid">
+                    {% for rc in related_cases %}
+                    <a href="/cases/{{ rc.id }}" class="related-card">
+                        <span class="related-category">{{ rc.case_type }}</span>
+                        <span class="related-status">{{ rc.case_status }}</span>
+                        <h4>{{ rc.title }}</h4>
+                        <p>{{ rc.description[:60] }}...</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="article-cta" style="margin-top:2rem;">
+                <h3>您有类似法律问题需要帮助？</h3>
+                <p>每个案件都有其独特性，建议预约专业律师一对一评估。</p>
+                <a href="/contact" class="btn btn-primary">免费预约咨询</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "{{ request.url_root.rstrip('/') }}/"
+    }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "案例展示",
+        "item": "{{ request.url_root.rstrip('/') }}/cases"
+    }, {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ case.title[:20] }}",
+        "item": "{{ request.url }}"
+    }]
+}
+</script>
+<script>
+if (typeof _hmt !== 'undefined') {
+    _hmt.push(['_trackEvent', 'case', 'view', '{{ case.title }}']);
+}
+</script>
+{% endblock %}

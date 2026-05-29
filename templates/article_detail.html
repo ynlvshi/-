@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} - {% endblock %}
+{% block meta_desc %}{{ meta_desc if meta_desc else article.summary }}{% endblock %}
+{% block meta_keywords %}{{ article.category }},法律文章,{{ lawyer_name }},昆明律师{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_desc %}{{ meta_desc if meta_desc else article.summary }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-bar">
+    <div class="container">
+        <a href="/">首页</a> <span class="breadcrumb-sep">›</span>
+        <a href="/articles">法律文章</a> <span class="breadcrumb-sep">›</span>
+        <span>{{ article.title[:30] }}...</span>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<section class="page-header page-header-sm">
+    <div class="container">
+        <h1>{{ article.title }}</h1>
+        <div class="article-detail-meta">
+            <span>{{ article.created_at }}</span>
+            <span>分类：{{ article.category }}</span>
+            <span>👁 {{ article.view_count }} 次阅读</span>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="article-content">
+            {{ article.content_html | safe }}
+        </div>
+
+        <!-- 社交分享 -->
+        <div class="article-share">
+            <p style="font-weight:600;margin-bottom:0.8rem;">📤 分享给需要的人</p>
+            <div class="share-buttons">
+                <button class="share-btn share-wechat" onclick="shareArticle('wechat')" title="分享到微信">
+                    💚 微信分享
+                </button>
+                <button class="share-btn share-copy" onclick="copyArticleLink()" title="复制链接">
+                    📋 复制链接
+                </button>
+            </div>
+            <div class="share-wechat-tip" id="wechatTip" style="display:none;">
+                <p>请截图或复制链接后分享到微信</p>
+                <p style="font-size:0.85rem;color:var(--text-muted);">{{ request.url }}</p>
+            </div>
+        </div>
+
+        <!-- 相关文章 -->
+        {% if related_articles %}
+        <div class="related-section" style="margin-top:2rem;">
+            <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);">📖 相关文章</h3>
+            <div class="related-grid">
+                {% for ra in related_articles %}
+                <a href="/articles/{{ ra.id }}" class="related-card">
+                    <span class="related-category">{{ ra.category }}</span>
+                    <h4>{{ ra.title }}</h4>
+                    <p>{{ ra.summary[:60] }}...</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 咨询引导 CTA -->
+        <div class="article-cta">
+            <h3>有类似法律问题？</h3>
+            <p>每个案件都有其独特性，建议预约专业律师一对一咨询。</p>
+            <a href="/contact" class="btn btn-primary">免费预约咨询</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ article.title }}",
+    "datePublished": "{{ article.created_at }}",
+    "dateModified": "{{ article.updated_at }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ lawyer_name }}"
+    },
+    "publisher": {
+        "@type": "LegalService",
+        "name": "{{ lawyer_name }}律师团队"
+    },
+    "description": "{{ meta_desc if meta_desc else article.summary }}",
+    "url": "{{ request.url }}"
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "{{ request.url_root.rstrip('/') }}/"
+    }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "法律文章",
+        "item": "{{ request.url_root.rstrip('/') }}/articles"
+    }, {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ article.title[:30] }}",
+        "item": "{{ request.url }}"
+    }]
+}
+</script>
+<script>
+function copyArticleLink() {
+    var url = window.location.href;
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+            alert('链接已复制，可以粘贴到微信发送给朋友');
+        });
+    } else {
+        var input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('链接已复制！');
+    }
+}
+function shareArticle(platform) {
+    if (platform === 'wechat') {
+        var tip = document.getElementById('wechatTip');
+        tip.style.display = tip.style.display === 'none' ? 'block' : 'none';
+    }
+}
+if (typeof _hmt !== 'undefined') {
+    _hmt.push(['_trackEvent', 'article', 'view', '{{ article.title }}']);
+}
+</script>
+{% endblock %}

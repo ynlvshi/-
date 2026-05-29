@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="{{ lawyer_name }}律师团队">
+    <meta name="robots" content="index, follow">
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>{% block title %}{{ site_name }}{% endblock %} - {{ lawyer_name }}律师团队 | 云南昆明</title>
+    <meta name="description" content="{% block meta_desc %}{{ lawyer_name }}律师团队，云南昆明专业法律服务。专注建设工程、政企法律顾问、民商事诉讼、刑事辩护。电话{{ phone }}。{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}昆明律师,云南律师,建设工程律师,法律顾问,刑事辩护,民事诉讼,企业法律顾问{% endblock %}">
+    <link rel="canonical" href="{{ request.url_root.rstrip('/') }}{{ request.path }}">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a3a5c'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23b8860b'>⚖</text></svg>">
+    <!-- Open Graph / 微信分享卡片 -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ site_name }}">
+    <meta property="og:title" content="{% block og_title %}{{ lawyer_name }}律师团队 | 云南昆明专业法律服务{% endblock %}">
+    <meta property="og:description" content="{% block og_desc %}{{ lawyer_name }}律师团队，专注建设工程、政企法律顾问、民商事诉讼。电话{{ phone }}{% endblock %}">
+    <meta property="og:url" content="{{ request.url_root.rstrip('/') }}{{ request.path }}">
+    <meta property="og:image" content="{{ request.url_root.rstrip('/') }}{% if lawyer_avatar %}{{ url_for('static', filename=lawyer_avatar) }}{% else %}{{ url_for('static', filename='uploads/lawyer_avatar.jpg') }}{% endif %}">
+    <meta property="og:locale" content="zh_CN">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260527a">
+    {% block extra_css %}{% endblock %}
+    {% set baidu_id = SiteSetting.get('baidu_tongji_id', '') %}
+    {% set ga_id = SiteSetting.get('google_analytics_id', '') %}
+    {% if baidu_id %}
+    <script>var _hmt=_hmt||[];(function(){var hm=document.createElement("script");hm.src="https://hm.baidu.com/hm.js?{{ baidu_id }}";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(hm,s);})();</script>
+    {% endif %}
+    {% if ga_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id }}"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ ga_id }}');</script>
+    {% endif %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LegalService",
+        "name": "{{ lawyer_name if lawyer_name else '邹卫华' }}律师团队",
+        "description": "{{ site_description }}",
+        "url": "{{ request.url_root.rstrip('/') }}",
+        "telephone": "{{ phone }}",
+        "image": "{{ request.url_root.rstrip('/') }}{% if lawyer_avatar %}{{ url_for('static', filename=lawyer_avatar) }}{% endif %}",
+        "address": { "@type": "PostalAddress", "addressLocality": "{{ address }}", "addressRegion": "云南省" },
+        "areaServed": { "@type": "State", "name": "云南省" },
+        "currenciesAccepted": "CNY",
+        "priceRange": "面议"
+    }
+    </script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">⚖</div>
+                    <div class="logo-text">
+                        <h1>{{ site_name }}<span class="region-badge">云南</span></h1>
+                        <span class="logo-sub">{{ site_description }}</span>
+                    </div>
+                </a>
+                <nav class="main-nav">
+                    <a href="/">首页</a>
+                    <a href="/about">关于团队</a>
+                    <a href="/team">律师团队</a>
+                    <a href="/services">专业领域</a>
+                    <a href="/cases">案例展示</a>
+                    <a href="/govt">政企服务</a>
+                    <a href="/articles">法律文章</a>
+                    <a href="/faq">常见问题</a>
+                    <a href="/contact">联系咨询</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="/contact" class="btn btn-sm btn-primary header-consult-btn">免费咨询</a>
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/">首页</a>
+        <a href="/about">关于团队</a>
+        <a href="/team">律师团队</a>
+        <a href="/services">专业领域</a>
+        <a href="/cases">案例展示</a>
+        <a href="/govt">政企服务</a>
+        <a href="/articles">法律文章</a>
+        <a href="/faq">常见问题</a>
+        <a href="/contact">联系咨询</a>
+    </div>
+
+    {% block breadcrumb %}{% endblock %}
+
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="container flash-container">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="footer-logo-icon">⚖</span>
+                        <span>{{ site_name }}</span>
+                    </div>
+                    <p>以专业法律知识，为您提供全方位的法律服务。</p>
+                    <div class="footer-social">
+                        <span class="footer-social-item">📞 {{ phone if phone else '电话待设置' }}</span>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>快速导航</h3>
+                    <a href="/">首页</a>
+                    <a href="/about">关于团队</a>
+                    <a href="/team">律师团队</a>
+                    <a href="/services">专业领域</a>
+                    <a href="/cases">案例展示</a>
+                    <a href="/govt">政企服务</a>
+                    <a href="/articles">法律文章</a>
+                    <a href="/faq">常见问题</a>
+                    <a href="/contact">联系咨询</a>
+                </div>
+                <div class="footer-col">
+                    <h3>服务领域</h3>
+                    <a href="/services">企业法律服务</a>
+                    <a href="/govt">政企法律顾问</a>
+                    <a href="/cases">典型案例</a>
+                </div>
+                <div class="footer-col">
+                    <h3>联系方式</h3>
+                    <div class="footer-contact-item">
+                        <span>📞</span>
+                        <span>{{ phone if phone else '电话待设置' }}</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span>📧</span>
+                        <span>{{ SiteSetting.get('contact_email', '邮箱待设置') }}</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span>📍</span>
+                        <span>{{ address if address else '地址待设置' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ now().year if now else '' }} {{ site_name }}. All Rights Reserved.</p>
+                {% if icp %}<p class="footer-icp">{{ icp }}</p>{% endif %}
+            </div>
+        </div>
+    </footer>
+
+    <!-- 智能咨询弹窗（30秒后弹出） -->
+    <div class="smart-popup-overlay" id="smartPopup" style="display:none;">
+        <div class="smart-popup">
+            <button class="smart-popup-close" id="smartPopupClose">✕</button>
+            <div class="smart-popup-icon">⚖</div>
+            <h3>需要法律帮助吗？</h3>
+            <p>免费获取专业律师一对一咨询，30分钟内回复。</p>
+            <div class="smart-popup-benefits">
+                <span>✓ 免费评估</span>
+                <span>✓ 快速响应</span>
+                <span>✓ 严格保密</span>
+            </div>
+            <a href="/contact" class="btn btn-primary btn-block" style="margin-top:1rem;">立即免费咨询</a>
+            <p class="smart-popup-phone">或直接拨打 <strong>{{ phone }}</strong></p>
+        </div>
+    </div>
+
+    <!-- AI 法律咨询聊天组件 -->
+    <div class="chat-widget" id="chatWidget">
+        <button class="chat-toggle" id="chatToggle" title="法律咨询">💬</button>
+        <div class="chat-panel" id="chatPanel">
+            <div class="chat-header">
+                <span>⚖ AI 法律咨询</span>
+                <button class="chat-close" id="chatClose">✕</button>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="chat-msg bot">您好！我是 AI 法律助手。请问有什么法律问题需要咨询？<br><small style="opacity:0.6;">提示：本回复仅供参考，不构成正式法律意见</small></div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" class="chat-input" id="chatInput" placeholder="输入您的问题..." maxlength="500">
+                <button class="chat-send" id="chatSend">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动端底部联系栏 -->
+    <div class="mobile-contact-bar" id="mobileContactBar">
+        <a href="tel:{{ phone }}" class="mcb-item mcb-call">
+            <span class="mcb-icon">📞</span>
+            <span class="mcb-label">一键拨号</span>
+        </a>
+        <a href="/contact" class="mcb-item mcb-consult">
+            <span class="mcb-icon">💬</span>
+            <span class="mcb-label">在线咨询</span>
+        </a>
+        <button class="mcb-item mcb-wechat" id="mcbWechat" type="button">
+            <span class="mcb-icon">💚</span>
+            <span class="mcb-label">添加微信</span>
+        </button>
+    </div>
+    <!-- 微信弹窗 -->
+    <div class="wechat-modal-overlay" id="wechatModal">
+        <div class="wechat-modal">
+            <button class="wechat-modal-close" id="wechatModalClose">✕</button>
+            <h3>添加律师微信</h3>
+            {% if wechat_qrcode %}
+            <img src="{{ url_for('static', filename=wechat_qrcode) }}" alt="微信二维码" style="width:200px;height:200px;object-fit:contain;">
+            {% else %}
+            <div style="width:200px;height:200px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin:0 auto;border-radius:8px;color:var(--text-muted);font-size:0.9rem;">
+                请在后台设置微信二维码
+            </div>
+            {% endif %}
+            <p style="margin-top:0.8rem;color:var(--text-light);font-size:0.9rem;">微信号：{{ phone }}</p>
+            <p style="font-size:0.8rem;color:var(--text-muted);">长按扫码或手动添加</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=20260527a"></script>
+    {% block extra_js %}{% endblock %}
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

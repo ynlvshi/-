@@ -1,0 +1,17 @@
+[Unit]
+Description=邹卫华律师团队网站
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/ynlawyers
+ExecStart=/usr/bin/python3 /var/www/ynlawyers/run.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

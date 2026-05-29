@@ -1,0 +1,36 @@
+{% extends "admin_base.html" %}
+{% block title %}荣誉证书管理 - 管理后台{% endblock %}
+{% block admin_title %}荣誉证书管理{% endblock %}
+{% block admin_content %}
+<div class="admin-toolbar">
+    <a href="/admin/certificates/add" class="btn btn-primary">+ 添加荣誉</a>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>颁发机构</th>
+            <th>分类</th>
+            <th>日期</th>
+            <th>显示</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cert in certificates %}
+        <tr>
+            <td><strong>{{ cert.title }}</strong></td>
+            <td>{{ cert.issuer }}</td>
+            <td>{% if cert.category == 'qualification' %}<span class="badge badge-info">执业资质</span>{% else %}<span class="badge badge-success">荣誉证书</span>{% endif %}</td>
+            <td>{{ cert.date }}</td>
+            <td>{% if cert.is_visible %}<span class="badge badge-success">显示</span>{% else %}<span class="badge badge-muted">隐藏</span>{% endif %}</td>
+            <td class="action-cell">
+                <a href="/admin/certificates/edit/{{ cert.id }}" class="btn-sm btn-edit">编辑</a>
+                <a href="/admin/certificates/delete/{{ cert.id }}" class="btn-sm btn-delete" onclick="return confirm('确定删除此荣誉信息？')">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

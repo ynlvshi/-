@@ -1,0 +1,138 @@
+{% extends "admin_base.html" %}
+{% block title %}{% if cert %}编辑荣誉{% else %}添加荣誉{% endif %} - 管理后台{% endblock %}
+{% block admin_title %}{% if cert %}编辑荣誉信息{% else %}添加荣誉信息{% endif %}{% endblock %}
+{% block admin_content %}
+<form method="POST" class="admin-form">
+    <div class="form-group">
+        <label for="title">荣誉/证书名称 <span class="required">*</span></label>
+        <input type="text" id="title" name="title" required value="{{ cert.title if cert else '' }}" placeholder="例如：律师执业资格证书">
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="issuer">颁发机构</label>
+            <input type="text" id="issuer" name="issuer" value="{{ cert.issuer if cert else '' }}" placeholder="例如：云南省司法厅">
+        </div>
+        <div class="form-group">
+            <label for="date">获得日期</label>
+            <input type="text" id="date" name="date" value="{{ cert.date if cert else '' }}" placeholder="例如：2018年">
+        </div>
+        <div class="form-group">
+            <label for="category">分类</label>
+            <select id="category" name="category">
+                <option value="qualification" {% if cert and cert.category == 'qualification' %}selected{% endif %}>执业资质</option>
+                <option value="honor" {% if not cert or cert.category == 'honor' %}selected{% endif %}>荣誉证书</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sort_order">排序</label>
+            <input type="number" id="sort_order" name="sort_order" value="{{ cert.sort_order if cert else '0' }}" min="0">
+        </div>
+    </div>
+
+    <!-- 证书图片上传 -->
+    <div class="form-group">
+        <label>证书图片</label>
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-preview" id="uploadPreview" {% if not (cert and cert.image_path) %}style="display:none"{% endif %}>
+                <img id="previewImg" src="{% if cert and cert.image_path %}{{ url_for('static', filename=cert.image_path) }}{% endif %}" alt="证书预览">
+                <button type="button" class="upload-remove" id="removeImageBtn" onclick="removeImage()">✕</button>
+            </div>
+            <div class="upload-placeholder" id="uploadPlaceholder" {% if cert and cert.image_path %}style="display:none"{% endif %}>
+                <div class="upload-icon">📤</div>
+                <p>点击上传证书图片</p>
+                <p class="upload-hint">支持 JPG、PNG、WebP 格式</p>
+                <input type="file" id="fileInput" accept="image/png,image/jpeg,image/gif,image/webp" style="display:none">
+            </div>
+            <input type="hidden" name="image_path" id="imagePathInput" value="{{ cert.image_path if cert and cert.image_path else '' }}">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="description">描述</label>
+        <textarea id="description" name="description" rows="3" placeholder="对该荣誉的简要描述">{{ cert.description if cert else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label class="checkbox-label">
+            <input type="checkbox" name="is_visible" {% if not cert or cert.is_visible %}checked{% endif %}>
+            在前台展示
+        </label>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="/admin/certificates" class="btn btn-outline">取消</a>
+    </div>
+</form>
+
+<style>
+.upload-area {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    max-width: 400px;
+    position: relative;
+}
+.upload-area:hover { border-color: var(--accent); background: #fef2f0; }
+.upload-placeholder .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+.upload-placeholder p { color: var(--text-light); font-size: 0.9rem; }
+.upload-placeholder .upload-hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem; }
+.upload-preview { position: relative; display: inline-block; }
+.upload-preview img { max-height: 200px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.upload-remove {
+    position: absolute; top: -8px; right: -8px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--accent); color: #fff; border: none;
+    font-size: 0.8rem; cursor: pointer; line-height: 24px; text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.upload-remove:hover { background: #a93226; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const placeholder = document.getElementById('uploadPlaceholder');
+    const preview = document.getElementById('uploadPreview');
+    const previewImg = document.getElementById('previewImg');
+    const imagePathInput = document.getElementById('imagePathInput');
+
+    uploadArea.addEventListener('click', function(e) {
+        if (e.target.closest('.upload-remove')) return;
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+
+        // 上传到服务器
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch('/admin/certificates/upload', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    previewImg.src = '/static/' + data.path;
+                    imagePathInput.value = data.path;
+                    placeholder.style.display = 'none';
+                    preview.style.display = 'inline-block';
+                } else {
+                    alert('上传失败: ' + data.error);
+                }
+            })
+            .catch(err => { alert('上传出错: ' + err.message); });
+    });
+});
+
+function removeImage() {
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('uploadPlaceholder').style.display = 'block';
+    document.getElementById('imagePathInput').value = '';
+    document.getElementById('fileInput').value = '';
+}
+</script>
+{% endblock %}

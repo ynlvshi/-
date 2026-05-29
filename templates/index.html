@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block title %}首页 - {% endblock %}
+{% block meta_desc %}{{ lawyer_name }}律师团队，云南昆明专业法律服务。专注建设工程、政企法律顾问、民商事诉讼、刑事辩护。10余名执业律师，15+年经验。电话{{ phone }}。{% endblock %}
+{% block og_title %}{{ lawyer_name }}律师团队 | 云南昆明专业法律服务{% endblock %}
+{% block content %}
+
+<!-- 英雄区域 -->
+<section class="hero-modern">
+    <div class="hero-modern-inner">
+        <div class="hero-modern-left">
+            <div class="hero-modern-tag">YUNNAN · LEGAL</div>
+            <h1><strong>{{ lawyer_name }}</strong> 律师团队</h1>
+            <div class="hero-modern-subtitle">
+                云南 · 专业法律服务
+                <span class="region-tag-hero">云南昆明</span>
+            </div>
+            <div class="hero-modern-divider"></div>
+            <p class="hero-modern-desc">{{ lawyer_intro if lawyer_intro else '执业多年，专注建设工程、民商事诉讼、政企法律顾问。以专业立身，以诚信为本，竭诚维护每一位当事人的合法权益。' }}</p>
+            <div class="hero-modern-stats">
+                <div class="hero-modern-stat">
+                    <span class="stat-num">{{ hero_years }}</span>
+                    <span class="stat-label">执业年限</span>
+                </div>
+                <div class="hero-modern-stat">
+                    <span class="stat-num">{{ hero_cases }}</span>
+                    <span class="stat-label">代理案件</span>
+                </div>
+                <div class="hero-modern-stat">
+                    <span class="stat-num">{{ hero_satisfaction }}</span>
+                    <span class="stat-label">客户好评</span>
+                </div>
+            </div>
+            <div class="hero-modern-buttons">
+                <a href="/contact" class="btn btn-primary btn-lg">预约咨询</a>
+                <a href="/about" class="btn btn-outline btn-lg">了解团队</a>
+            </div>
+        </div>
+        <div class="hero-modern-right">
+            <div class="hero-modern-photo">
+                {% if lawyer_avatar %}
+                <div class="hero-modern-avatar" style="background:transparent;overflow:hidden;">
+                    <img src="{{ url_for('static', filename=lawyer_avatar) }}" style="width:100%;height:100%;object-fit:cover;" alt="{{ lawyer_name }}">
+                </div>
+                {% else %}
+                <div class="hero-modern-avatar">{{ lawyer_name[0] }}</div>
+                {% endif %}
+                <div class="hero-modern-badge">{{ lawyer_title }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 谁在委托我们 -->
+<section class="client-types-section">
+    <div class="container">
+        <h2 class="section-title">谁在委托我们</h2>
+        <p class="section-subtitle">深耕云南，服务多元</p>
+        <div class="client-types-grid">
+            <div class="client-type-card">
+                <div class="client-type-icon">🏢</div>
+                <h3>中小企业</h3>
+                <div class="client-type-divider"></div>
+                <p>建设工程纠纷、合同审查、股权架构、劳资争议、应收账款追讨——为中小企业的合规经营与商业纠纷提供全程法律支持。</p>
+            </div>
+            <div class="client-type-card">
+                <div class="client-type-icon">🏛</div>
+                <h3>政府 · 国有企业</h3>
+                <div class="client-type-divider"></div>
+                <p>常年法律顾问、重大项目法律论证、招投标合规审查、行政诉讼代理——为政府和国企客户提供专业可靠的法律顾问服务。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 核心服务 -->
+<section class="section services-section">
+    <div class="container">
+        <h2 class="section-title">核心服务</h2>
+        <p class="section-subtitle">团队协作为您提供全方位法律解决方案</p>
+        <div class="services-grid">
+            <div class="service-card service-card-featured">
+                <div class="service-icon-wrapper">
+                    <div class="service-icon">🏗</div>
+                    <span class="featured-tag">王牌业务</span>
+                </div>
+                <h3>建设工程法律纠纷</h3>
+                <p>工程款结算、工期索赔、质量鉴定、招投标争议、转分包合同纠纷——团队核心优势领域。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon-wrapper"><div class="service-icon">🏛</div></div>
+                <h3>政企法律顾问</h3>
+                <p>政府机关及国有企业常年法律顾问、重大决策法律论证、合同审查与合规管理。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon-wrapper"><div class="service-icon">⚖</div></div>
+                <h3>民商事诉讼</h3>
+                <p>合同纠纷、债权债务、房产纠纷、侵权责任等案件的代理与诉讼。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon-wrapper"><div class="service-icon">🏢</div></div>
+                <h3>公司法务</h3>
+                <p>企业法律顾问、股权架构设计、并购尽职调查、商业合同审查。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon-wrapper"><div class="service-icon">🛡</div></div>
+                <h3>刑事辩护</h3>
+                <p>经济犯罪、职务犯罪辩护，为当事人争取最大合法权益。</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon-wrapper"><div class="service-icon">👨‍👩‍👧</div></div>
+                <h3>婚姻家庭</h3>
+                <p>离婚纠纷、财产分割、子女抚养、遗产继承等婚姻家事法律服务。</p>
+            </div>
+        </div>
+        <div class="text-center" style="margin-top:2.5rem;">
+            <a href="/services" class="btn btn-outline">查看全部服务领域</a>
+        </div>
+    </div>
+</section>
+
+<!-- 典型案例 -->
+<section class="section cases-preview-section">
+    <div class="container">
+        <h2 class="section-title">典型案例</h2>
+        <p class="section-subtitle">以案说法 · 专业赢得信赖</p>
+        <div class="cases-preview-grid" id="casesPreview"></div>
+        <div class="text-center" style="margin-top: 2rem;">
+            <a href="/cases" class="btn btn-outline">查看全部案例</a>
+        </div>
+    </div>
+</section>
+
+<!-- 常见问题 FAQ 预览 -->
+<section class="section faq-preview-section">
+    <div class="container">
+        <h2 class="section-title">常见法律问题</h2>
+        <p class="section-subtitle">专业解答 · 免费参考</p>
+        <div class="faq-preview-grid">
+            {% if faq_preview %}
+            {% for faq in faq_preview %}
+            <a href="/faq" class="faq-preview-card">
+                <span class="faq-preview-icon">❓</span>
+                <h3>{{ faq.question[:20] }}{% if faq.question|length > 20 %}...{% endif %}</h3>
+                <p>{{ faq.answer[:40] }}...</p>
+            </a>
+            {% endfor %}
+            {% else %}
+            <a href="/faq" class="faq-preview-card">
+                <span class="faq-preview-icon">🏗</span>
+                <h3>建设工程纠纷</h3>
+                <p>拖欠工程款怎么办？工程合同纠纷怎么处理？</p>
+            </a>
+            <a href="/faq" class="faq-preview-card">
+                <span class="faq-preview-icon">👨‍👩‍👧</span>
+                <h3>婚姻家庭</h3>
+                <p>离婚财产如何分割？子女抚养权怎么争取？</p>
+            </a>
+            <a href="/faq" class="faq-preview-card">
+                <span class="faq-preview-icon">🛡</span>
+                <h3>刑事辩护</h3>
+                <p>家属被拘留怎么办？取保候审如何申请？</p>
+            </a>
+            <a href="/faq" class="faq-preview-card">
+                <span class="faq-preview-icon">⚖</span>
+                <h3>民商诉讼</h3>
+                <p>合同纠纷诉讼时效是多久？请律师要多少钱？</p>
+            </a>
+            {% endif %}
+        </div>
+        <div class="text-center" style="margin-top:2rem;">
+            <a href="/faq" class="btn btn-outline">查看全部常见问题</a>
+        </div>
+    </div>
+</section>
+
+<!-- 最新文章 -->
+<section class="section articles-section">
+    <div class="container">
+        <h2 class="section-title">法律洞察</h2>
+        <p class="section-subtitle">专业分析 · 实务分享</p>
+        <div class="articles-grid">
+            {% for article in articles %}
+            <article class="article-card">
+                <div class="article-card-top">
+                    <div class="article-category">{{ article.category }}</div>
+                </div>
+                <h3><a href="/articles/{{ article.id }}">{{ article.title }}</a></h3>
+                <p class="article-summary">{{ article.summary }}</p>
+                <div class="article-meta">
+                    <span>{{ article.created_at.strftime('%Y-%m-%d') if article.created_at else '' }}</span>
+                    <span>{{ article.view_count }} 次阅读</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% if articles %}
+        <div class="text-center" style="margin-top: 2rem;">
+            <a href="/articles" class="btn btn-outline">查看全部文章</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

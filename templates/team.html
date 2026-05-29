@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}律师团队 - {% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>律师团队</h1>
+        <p>经验丰富 · 专业分工 · 协同办案</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="team-full-grid">
+            {% for lawyer in lawyers %}
+            <div class="team-full-card">
+                <div class="team-full-avatar">
+                    <div class="avatar-placeholder avatar-lg">{{ lawyer.name[0] }}</div>
+                </div>
+                <div class="team-full-info">
+                    <h3>{{ lawyer.name }}</h3>
+                    <p class="team-title">{{ lawyer.title }}</p>
+                    <p class="team-specialty"><strong>擅长领域：</strong>{{ lawyer.specialty }}</p>
+                    <p class="team-intro">{{ lawyer.intro }}</p>
+                    <div class="team-contact">
+                        {% if lawyer.phone %}<span>📞 {{ lawyer.phone }}</span>{% endif %}
+                        {% if lawyer.email %}<span>✉ {{ lawyer.email }}</span>{% endif %}
+                    </div>
+                    <a href="/team/{{ lawyer.id }}" class="btn btn-sm btn-primary">查看详情</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

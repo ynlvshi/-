@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}服务器错误 - {% endblock %}
+{% block meta_desc %}抱歉，服务器遇到了一些问题，请稍后再试。{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container" style="text-align:center;max-width:600px;padding:4rem 0;">
+        <div style="font-size:5rem;margin-bottom:1rem;">🛡</div>
+        <h1 style="font-size:2rem;color:var(--primary);margin-bottom:1rem;">系统维护中</h1>
+        <p style="color:var(--text-light);margin-bottom:2rem;line-height:1.8;">抱歉，服务器遇到了一些问题。<br>如需紧急咨询，请直接拨打电话 <strong>{{ phone }}</strong></p>
+        <div style="display:flex;gap:1rem;justify-content:center;">
+            <a href="/" class="btn btn-primary">返回首页</a>
+            <a href="/contact" class="btn btn-outline">在线咨询</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

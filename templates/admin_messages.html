@@ -1,0 +1,69 @@
+{% extends "admin_base.html" %}
+{% block title %}留言管理 - 管理后台{% endblock %}
+{% block admin_title %}留言管理{% endblock %}
+{% block admin_content %}
+<div class="admin-toolbar">
+    <span>共 {{ messages|length }} 条留言</span>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>电话</th>
+            <th>时段</th>
+            <th>留言内容</th>
+            <th>状态</th>
+            <th>时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for msg in messages %}
+        <tr class="{% if not msg.is_read %}unread{% endif %}">
+            <td><strong>{{ msg.name }}</strong></td>
+            <td>{{ msg.phone or '-' }}</td>
+            <td>{{ msg.prefer_time or '-' }}</td>
+            <td class="msg-preview">{{ msg.content[:40] }}{% if msg.content|length > 40 %}...{% endif %}</td>
+            <td>
+                {% if not msg.is_read %}<span class="badge badge-warning">未读</span>{% else %}<span class="badge badge-success">已读</span>{% endif %}
+            </td>
+            <td>{{ msg.created_at.strftime('%m-%d %H:%M') if msg.created_at else '' }}</td>
+            <td class="action-cell">
+                <button class="btn-sm btn-edit" onclick="toggleReply('reply-{{ msg.id }}')">
+                    {% if msg.reply %}编辑回复{% else %}回复{% endif %}
+                </button>
+                <a href="/admin/messages/read/{{ msg.id }}" class="btn-sm btn-edit">标为已读</a>
+                <a href="/admin/messages/delete/{{ msg.id }}" class="btn-sm btn-delete" onclick="return confirm('确定删除？')">删除</a>
+            </td>
+        </tr>
+        <tr id="reply-{{ msg.id }}" class="reply-row" style="display:none;">
+            <td colspan="7">
+                <form method="POST" action="/admin/messages/reply/{{ msg.id }}" class="inline-form">
+                    <div class="reply-info">
+                        <strong>{{ msg.name }}</strong> 说：{{ msg.content }}
+                        {% if msg.phone %} | 📞 {{ msg.phone }}{% endif %}
+                        {% if msg.email %} | ✉ {{ msg.email }}{% endif %}
+                        {% if msg.prefer_time %} | ⏰ {{ msg.prefer_time }}{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>回复内容：</label>
+                        <textarea name="reply" rows="3" placeholder="请输入回复内容...">{{ msg.reply }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-sm">保存回复</button>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="toggleReply('reply-{{ msg.id }}')">取消</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% block extra_js %}
+<script>
+function toggleReply(id) {
+    var el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "admin_base.html" %}
+{% block title %}{% if faq %}编辑 FAQ{% else %}新增 FAQ{% endif %} - 管理后台{% endblock %}
+{% block admin_title %}{% if faq %}编辑 FAQ{% else %}新增 FAQ{% endif %}{% endblock %}
+{% block admin_content %}
+<form method="POST" class="admin-form">
+    <div class="form-group">
+        <label for="question">问题 <span class="required">*</span></label>
+        <input type="text" id="question" name="question" value="{{ faq.question if faq else '' }}" required placeholder="常见法律问题">
+    </div>
+    <div class="form-group">
+        <label for="answer">回答 <span class="required">*</span></label>
+        <textarea id="answer" name="answer" rows="6" required placeholder="专业的法律解答">{{ faq.answer if faq else '' }}</textarea>
+    </div>
+    <div class="form-row">
+        <div class="form-group">
+            <label for="category">分类</label>
+            <input type="text" id="category" name="category" value="{{ faq.category if faq else '通用' }}" placeholder="建设工程、婚姻家庭、刑事辩护等">
+        </div>
+        <div class="form-group">
+            <label for="sort_order">排序</label>
+            <input type="number" id="sort_order" name="sort_order" value="{{ faq.sort_order if faq else 0 }}" min="0">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="checkbox-label">
+            <input type="checkbox" name="is_published" {% if faq and faq.is_published %}checked{% elif not faq %}checked{% endif %}>
+            发布
+        </label>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+        <a href="/admin/faq" class="btn btn-outline">返回</a>
+    </div>
+</form>
+{% endblock %}

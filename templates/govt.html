@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}政企服务 - {% endblock %}
+{% block meta_desc %}政府及国有企业法律顾问服务。常年法律顾问、重大项目法律论证、招投标合规、行政法律事务。云南昆明专业律师团队，10+名执业律师。{% endblock %}
+{% block content %}
+
+<section class="govt-hero">
+    <div class="container">
+        <h1>政企法律顾问</h1>
+        <p>专业团队为政府机关和国有企业提供常年法律顾问服务，以严谨、专业、高效的法律服务助力依法行政与国企合规经营。</p>
+    </div>
+</section>
+
+<section class="govt-services">
+    <div class="container">
+        <h2 class="section-title">服务内容</h2>
+        <p class="section-subtitle">覆盖政府及国有企业的全方位法律需求</p>
+        <div class="govt-services-grid">
+            <div class="govt-service-card">
+                <div class="govt-icon">📋</div>
+                <h3>常年法律顾问</h3>
+                <p>为政府机关及国企提供日常法律咨询、合同审查、制度审查等常年法律服务。</p>
+            </div>
+            <div class="govt-service-card">
+                <div class="govt-icon">⚖</div>
+                <h3>行政法律事务</h3>
+                <p>行政许可、行政处罚、行政强制、政府信息公开、行政复议与行政诉讼代理。</p>
+            </div>
+            <div class="govt-service-card">
+                <div class="govt-icon">🏗</div>
+                <h3>重大项目法律论证</h3>
+                <p>PPP 项目、政府采购、土地出让、城市更新等重大项目的法律风险评估与论证。</p>
+            </div>
+            <div class="govt-service-card">
+                <div class="govt-icon">📝</div>
+                <h3>规范性文件审查</h3>
+                <p>地方性法规、政府规章、规范性文件的合法性审查与起草协助。</p>
+            </div>
+            <div class="govt-service-card">
+                <div class="govt-icon">🔍</div>
+                <h3>招投标合规</h3>
+                <p>政府采购及国企招标全流程合规审查、质疑投诉处理、合同履约管理。</p>
+            </div>
+            <div class="govt-service-card">
+                <div class="govt-icon">🛡</div>
+                <h3>国企改革法律服务</h3>
+                <p>混合所有制改革、国有资产交易、员工持股方案设计与合规审查。</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="govt-advantages">
+    <div class="container">
+        <h2 class="section-title">为什么选择我们</h2>
+        <p class="section-subtitle">团队深耕云南，熟悉本地政务与企业环境</p>
+        <div class="govt-advantages-grid">
+            <div class="govt-advantage-item">
+                <span class="govt-advantage-num">10+</span>
+                <span class="govt-advantage-label">团队律师</span>
+            </div>
+            <div class="govt-advantage-item">
+                <span class="govt-advantage-num">15+</span>
+                <span class="govt-advantage-label">服务年限</span>
+            </div>
+            <div class="govt-advantage-item">
+                <span class="govt-advantage-num">600+</span>
+                <span class="govt-advantage-label">审查合同</span>
+            </div>
+            <div class="govt-advantage-item">
+                <span class="govt-advantage-num">云南</span>
+                <span class="govt-advantage-label">深耕本地</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if govt_cases %}
+<section class="section cases-preview-section">
+    <div class="container">
+        <h2 class="section-title">政企服务案例</h2>
+        <p class="section-subtitle">以专业赢得信任</p>
+        <div class="cases-preview-grid">
+            {% for case in govt_cases %}
+            <div class="case-card">
+                <div class="case-card-header">
+                    <span class="case-type-badge">{{ case.case_type }}</span>
+                    <span class="case-status">{{ case.case_status }}</span>
+                </div>
+                <h3><a href="/cases/{{ case.id }}">{{ case.title }}</a></h3>
+                <p class="case-desc">{{ case.description[:100] }}...</p>
+                <a href="/cases/{{ case.id }}" class="read-more">查看详情 →</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<div class="text-center" style="padding:3rem 0;">
+    <p style="font-size:1.1rem;color:var(--text-light);margin-bottom:1.5rem;">需要政企法律顾问服务？</p>
+    <a href="/contact" class="btn btn-primary btn-lg">联系我们</a>
+</div>
+
+{% endblock %}

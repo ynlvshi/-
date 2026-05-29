@@ -1,0 +1,38 @@
+{% extends "admin_base.html" %}
+{% block title %}律师管理 - 管理后台{% endblock %}
+{% block admin_title %}律师管理{% endblock %}
+{% block admin_content %}
+<div class="admin-toolbar">
+    <a href="/admin/lawyers/add" class="btn btn-primary">+ 添加律师</a>
+</div>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>职称</th>
+            <th>擅长领域</th>
+            <th>电话</th>
+            <th>状态</th>
+            <th>排序</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lawyer in lawyers %}
+        <tr>
+            <td><strong>{{ lawyer.name }}</strong></td>
+            <td>{{ lawyer.title }}</td>
+            <td>{{ lawyer.specialty }}</td>
+            <td>{{ lawyer.phone or '-' }}</td>
+            <td>{% if lawyer.is_active %}<span class="badge badge-success">在职</span>{% else %}<span class="badge badge-muted">离职</span>{% endif %}</td>
+            <td>{{ lawyer.sort_order }}</td>
+            <td class="action-cell">
+                <a href="/admin/lawyers/edit/{{ lawyer.id }}" class="btn-sm btn-edit">编辑</a>
+                <a href="/admin/lawyers/delete/{{ lawyer.id }}" class="btn-sm btn-delete" onclick="return confirm('确定删除该律师信息吗？')">删除</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "admin_base.html" %}
+{% block title %}仪表盘 - 管理后台{% endblock %}
+{% block admin_title %}仪表盘{% endblock %}
+{% block admin_content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ article_count }}</div>
+        <div class="stat-label">文章总数</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ case_count }}</div>
+        <div class="stat-label">案例总数</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ faq_count }}</div>
+        <div class="stat-label">FAQ 数</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ message_count }}</div>
+        <div class="stat-label">留言总数</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number {% if unread_messages > 0 %}stat-warning{% endif %}">{{ unread_messages }}</div>
+        <div class="stat-label">未读留言</div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <h3>快捷操作</h3>
+    <div class="actions-grid">
+        <a href="/admin/articles/add" class="action-card">
+            <span class="action-icon">✏</span>
+            <span>发布新文章</span>
+        </a>
+        <a href="/admin/cases/add" class="action-card">
+            <span class="action-icon">📂</span>
+            <span>添加案例</span>
+        </a>
+        <a href="/admin/faq/add" class="action-card">
+            <span class="action-icon">❓</span>
+            <span>新增 FAQ</span>
+        </a>
+        <a href="/admin/messages" class="action-card">
+            <span class="action-icon">💬</span>
+            <span>查看留言</span>
+        </a>
+        <a href="/admin/lawyers" class="action-card">
+            <span class="action-icon">👥</span>
+            <span>管理团队</span>
+        </a>
+        <a href="/admin/settings" class="action-card">
+            <span class="action-icon">⚙</span>
+            <span>网站设置</span>
+        </a>
+        <a href="/" target="_blank" class="action-card">
+            <span class="action-icon">🌐</span>
+            <span>访问前台</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

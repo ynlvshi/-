@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ lawyer.name }} - 律师详情 - {% endblock %}
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <a href="/team" class="back-link">← 返回律师团队</a>
+        <h1>{{ lawyer.name }} <small>{{ lawyer.title }}</small></h1>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="lawyer-detail">
+            <div class="lawyer-detail-avatar">
+                <div class="avatar-placeholder avatar-xl">{{ lawyer.name[0] }}</div>
+            </div>
+            <div class="lawyer-detail-info">
+                <div class="info-row">
+                    <span class="info-label">擅长领域</span>
+                    <span class="info-value">{{ lawyer.specialty }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">联系电话</span>
+                    <span class="info-value">{{ lawyer.phone or '未设置' }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">电子邮箱</span>
+                    <span class="info-value">{{ lawyer.email or '未设置' }}</span>
+                </div>
+                <div class="info-row info-intro">
+                    <span class="info-label">律师简介</span>
+                    <p class="info-value">{{ lawyer.intro }}</p>
+                </div>
+                <a href="/contact" class="btn btn-primary">预约咨询</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
