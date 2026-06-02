@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
-Sitemap: https://ynlawyers.com/sitemap.xml
+Sitemap: https://lawyer01.com/sitemap.xml

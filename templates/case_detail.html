@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ case.title }} - 案例详情{% endblock %}
 {% block meta_desc %}{{ case.description[:150] if case.description else case.title }}{% endblock %}
+{% block meta_keywords %}{{ case.case_type }},{{ case.title[:30] }},律师案例,{{ case.case_status }},昆明律师,云南律师,法律咨询{% endblock %}
 
 {% block breadcrumb %}
 <div class="breadcrumb-bar">
@@ -70,6 +71,20 @@
             </div>
             {% endif %}
 
+            <!-- 相关FAQ -->
+            {% if related_faqs %}
+            <div class="related-section" style="margin-top:2rem;">
+                <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);">❓ 相关问题解答</h3>
+                <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                    {% for rf in related_faqs %}
+                    <a href="/faq?cat={{ rf.category }}" style="padding:0.6rem 1rem;background:var(--bg);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.95rem;transition:all 0.2s;border-left:3px solid var(--accent);">
+                        {{ rf.question }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
             <div class="article-cta" style="margin-top:2rem;">
                 <h3>您有类似法律问题需要帮助？</h3>
                 <p>每个案件都有其独特性，建议预约专业律师一对一评估。</p>
@@ -81,6 +96,29 @@
 {% endblock %}
 
 {% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ case.title }}",
+    "description": "{{ case.description[:150] if case.description else case.title }}",
+    "articleSection": "{{ case.case_type }}",
+    "datePublished": "{{ case.created_at.strftime('%Y-%m-%d') if case.created_at else '' }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ lawyer_name }}",
+        "jobTitle": "{{ lawyer_title }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "{{ site_name }}"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ request.url }}"
+    }
+}
+</script>
 <script type="application/ld+json">
 {
     "@context": "https://schema.org",

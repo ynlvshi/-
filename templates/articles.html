@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block title %}法律文章{% endblock %}
+{% block meta_desc %}法律知识、实务经验与最新资讯。涵盖建设工程、合同纠纷、婚姻家庭、刑事辩护、劳动争议等领域。{{ site_name }}——云南昆明专业法律服务。{% endblock %}
+{% block meta_keywords %}法律文章,法律知识,法律实务,建设工程法律,合同纠纷,婚姻家庭法律,刑事法律,法律科普{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-bar">
+    <div class="container">
+        <a href="/">首页</a> <span class="breadcrumb-sep">›</span>
+        <span>法律文章</span>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
 
 <section class="page-header">
@@ -47,4 +59,24 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "{{ request.url_root.rstrip('/') }}/"
+    }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "法律文章",
+        "item": "{{ request.url_root.rstrip('/') }}/articles"
+    }]
+}
+</script>
 {% endblock %}

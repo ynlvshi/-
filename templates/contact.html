@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block title %}联系咨询{% endblock %}
+{% block meta_desc %}联系{{ site_name }}，专业法律咨询预约。电话{{ phone }}。云南昆明建设工程律师、法律顾问、刑事辩护，首次咨询免费。{% endblock %}
+{% block meta_keywords %}律师咨询,免费法律咨询,昆明律师咨询,云南律师咨询,预约律师,法律咨询电话,在线咨询律师{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-bar">
+    <div class="container">
+        <a href="/">首页</a> <span class="breadcrumb-sep">›</span>
+        <span>联系咨询</span>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
 
 <section class="page-header">
@@ -61,6 +73,21 @@
                         <p style="font-size:.8rem;color:var(--text-muted);margin-top:.3rem;">扫码添加律师微信</p>
                     </div>
                     {% endif %}
+
+                    <!-- 小程序入口 -->
+                    <div class="contact-item" style="flex-direction:column;align-items:center;text-align:center;border-top:1px solid var(--border-light);padding-top:1.2rem;margin-top:.5rem;">
+                        <span class="contact-icon" style="display:block;font-size:1.5rem;">📱</span>
+                        <strong style="color:#07c160;">微信小程序</strong>
+                        <p style="font-size:.85rem;color:var(--text);margin-top:.3rem;">云法律师 建设工程法律咨询</p>
+                        {% if miniprogram_qrcode %}
+                        <img src="{{ url_for('static', filename=miniprogram_qrcode) }}" style="width:140px;height:140px;object-fit:contain;margin-top:.5rem;border:1px solid var(--border-light);border-radius:8px;" alt="小程序码">
+                        {% else %}
+                        <div style="width:140px;height:140px;background:var(--bg);margin:.5rem auto 0;display:flex;align-items:center;justify-content:center;border-radius:8px;border:2px dashed var(--border);color:var(--text-muted);font-size:.75rem;line-height:1.4;">
+                            请在后台设置<br>小程序码图片
+                        </div>
+                        {% endif %}
+                        <p style="font-size:.78rem;color:var(--text-muted);margin-top:.3rem;">微信扫码随时随地咨询</p>
+                    </div>
                 </div>
             </div>
             <div class="contact-form">
@@ -132,4 +159,24 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "{{ request.url_root.rstrip('/') }}/"
+    }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "联系咨询",
+        "item": "{{ request.url_root.rstrip('/') }}/contact"
+    }]
+}
+</script>
 {% endblock %}

@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 {% block title %}案例展示{% endblock %}
+{% block meta_desc %}典型案例展示：建设工程纠纷、婚姻家庭、刑事辩护、政企法律顾问等真实办案成果。以案说法，专业赢得信赖。{% endblock %}
+{% block meta_keywords %}律师案例,建设工程案例,离婚案例,刑事辩护案例,胜诉案例,昆明律师,云南律师{% endblock %}
+
+{% block breadcrumb %}
+<div class="breadcrumb-bar">
+    <div class="container">
+        <a href="/">首页</a> <span class="breadcrumb-sep">›</span>
+        <span>案例展示</span>
+    </div>
+</div>
+{% endblock %}
+
 {% block content %}
 
 <section class="page-header">
@@ -40,4 +52,24 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "首页",
+        "item": "{{ request.url_root.rstrip('/') }}/"
+    }, {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "案例展示",
+        "item": "{{ request.url_root.rstrip('/') }}/cases"
+    }]
+}
+</script>
 {% endblock %}

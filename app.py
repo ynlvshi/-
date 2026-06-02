@@ -259,9 +259,15 @@ def article_detail(article_id):
         Article.created_at.desc()
     ).limit(3).all()
 
+    # 相关FAQ（同业务分类）
+    related_faqs = FAQ.query.filter_by(
+        is_published=True, category=article.category
+    ).order_by(FAQ.sort_order).limit(4).all()
+
     return render_template('article_detail.html',
                          article=article.to_dict(include_content=True),
-                         meta_desc=meta_desc, related_articles=related_articles)
+                         meta_desc=meta_desc, related_articles=related_articles,
+                         related_faqs=related_faqs)
 
 
 @app.route('/contact', methods=['GET', 'POST'])
@@ -337,7 +343,12 @@ def case_detail(case_id):
     related_cases = Case.query.filter_by(
         is_published=True, case_type=case.case_type
     ).filter(Case.id != case_id).order_by(Case.sort_order).limit(3).all()
-    return render_template('case_detail.html', case=case.to_dict(), related_cases=related_cases)
+    # 相关FAQ（同业务分类）
+    related_faqs = FAQ.query.filter_by(
+        is_published=True, category=case.case_type
+    ).order_by(FAQ.sort_order).limit(4).all()
+    return render_template('case_detail.html', case=case.to_dict(),
+                         related_cases=related_cases, related_faqs=related_faqs)
 
 
 @app.route('/team')
@@ -365,9 +376,13 @@ def govt_services():
 
 @app.route('/faq')
 def faq():
-    faq_data = FAQ.query.filter_by(is_published=True).order_by(FAQ.sort_order).all()
+    cat = request.args.get('cat', '')
+    query = FAQ.query.filter_by(is_published=True)
+    if cat:
+        query = query.filter_by(category=cat)
+    faq_data = query.order_by(FAQ.sort_order).all()
     faq_categories = [c[0] for c in db.session.query(FAQ.category).filter_by(is_published=True).distinct().all() if c[0]]
-    return render_template('faq.html', faq_data=faq_data, faq_categories=faq_categories)
+    return render_template('faq.html', faq_data=faq_data, faq_categories=faq_categories, current_cat=cat)
 
 
 @app.route('/robots.txt')
@@ -1169,6 +1184,25 @@ def init_database():
                 {'question': '请律师一般需要多少钱？', 'answer': '律师费因案件类型、复杂程度、标的额等因素而异。一般按以下几种方式收费：计件收费（如刑事案件按阶段）、按标的额比例收费（如经济纠纷）、计时收费。建议预约面谈后，我们会根据您的具体情况提供透明的费用方案。首次咨询免费。', 'category': '通用', 'sort_order': 5},
                 {'question': '合同纠纷的诉讼时效是多久？', 'answer': '根据民法典规定，普通诉讼时效为3年，从知道或应当知道权利受到损害以及义务人之日起计算。诉讼时效可以因权利人主张权利、义务人同意履行等事由中断而重新计算。建议尽早维权，避免超过时效丧失胜诉权。', 'category': '民商诉讼', 'sort_order': 6},
                 {'question': '委托律师需要准备什么材料？', 'answer': '一般需要准备：身份证件、与案件相关的合同协议、往来函件、付款凭证、聊天记录等证据材料。不同案件类型所需材料不同，预约咨询时我们会告知您具体需要准备的材料清单。', 'category': '通用', 'sort_order': 7},
+                {'question': '建设工程合同没有书面签订，口头协议有效吗？', 'answer': '建设工程合同依法应当采用书面形式。但根据《民法典》第490条，一方已经履行主要义务、对方接受的，合同成立。口头协议存在举证困难，建议尽量补签书面合同，或保留施工记录、付款凭证、微信聊天记录等证据。', 'category': '建设工程', 'sort_order': 8},
+                {'question': '工程变更导致工程量增加，如何结算？', 'answer': '工程变更包括设计变更、工程量增减、施工条件变化等。结算时应区分：合同内约定的变更按合同单价结算；合同外新增项目由双方协商确定价格；协商不成的可参照当地建设主管部门发布的计价标准或市场价。务必保留变更签证单、会议纪要、往来函件等书面凭证。', 'category': '建设工程', 'sort_order': 9},
+                {'question': '发包方拖延竣工验收怎么办？', 'answer': '发包方无正当理由拖延验收的，承包方可采取以下措施：1）书面催告发包方在合理期限内组织验收；2）发包方逾期仍不验收的，视为工程已通过竣工验收；3）承包方可依据合同约定主张工程款支付。建议保留完整的竣工资料和催告函件。', 'category': '建设工程', 'sort_order': 10},
+                {'question': '婚前买房婚后共同还贷，离婚时房产怎么分？', 'answer': '婚前一方支付首付购房、婚后双方共同还贷的，离婚时：房屋归产权登记方所有；婚后共同还贷部分及对应的增值部分，由产权方对另一方进行补偿。补偿金额一般按共同还贷金额占购房总成本的比例乘以房屋现值计算。建议保留还贷记录以便举证。', 'category': '婚姻家庭', 'sort_order': 11},
+                {'question': '离婚后孩子抚养费标准是多少？可以变更吗？', 'answer': '抚养费一般按月总收入的20%-30%计算（负担两个以上子女的可适当提高，但不超过50%）。无固定收入的参照同行业标准。抚养费可根据情况变化申请变更：子女需求增加、抚养方经济状况恶化或支付方收入显著增减时，可向法院申请调整。', 'category': '婚姻家庭', 'sort_order': 12},
+                {'question': '被公安机关传唤问话，可以不请律师自己去吗？', 'answer': '建议尽快委托律师。虽然被传唤人有权自行前往，但律师介入的价值在于：提前告知权利义务、防止诱供或不当讯问、评估是否存在被拘留风险。如已被列为犯罪嫌疑人，律师可第一时间会见并提供法律帮助。自行前往前至少应先电话咨询律师了解注意事项。', 'category': '刑事辩护', 'sort_order': 13},
+                {'question': '取保候审的条件是什么？如何申请？', 'answer': '取保候审适用于：可能判处管制、拘役或独立适用附加刑的；可能判处有期徒刑以上刑罚但无社会危险性的；患有严重疾病、怀孕或哺乳期的；羁押期满案件未办结的。由犯罪嫌疑人、被告人或其法定代理人、近亲属、律师向办案机关申请，并需提供保证人或缴纳保证金。', 'category': '刑事辩护', 'sort_order': 14},
+                {'question': '公司不签劳动合同怎么办？', 'answer': '用人单位自用工之日起超过一个月不满一年未签书面劳动合同的，应向劳动者每月支付二倍工资。劳动者应保留工牌、工资流水、工作邮件、微信聊天记录等证明劳动关系的证据。超过一年未签的视为已订立无固定期限劳动合同。可向劳动监察部门投诉或申请劳动仲裁。', 'category': '劳动争议', 'sort_order': 15},
+                {'question': '被公司裁员/辞退，能拿到多少赔偿？', 'answer': '经济补偿按工作年限计算：每满一年支付一个月工资；六个月以上不满一年的按一年算；不满六个月的支付半个月工资。违法解除劳动合同的，按经济补偿标准的二倍支付赔偿金。月工资高于当地社平工资三倍的，按三倍封顶计算。注意保留解除通知书等证据。', 'category': '劳动争议', 'sort_order': 16},
+                {'question': '对方违约不履行合同，我该怎么办？', 'answer': '建议按以下步骤处理：1）书面催告对方在合理期限内履行；2）收集违约证据（合同、往来函件、付款凭证、聊天记录）；3）评估损失金额；4）协商不成的向法院起诉，可同时主张继续履行、赔偿损失、支付违约金等。注意诉讼时效为3年。', 'category': '合同纠纷', 'sort_order': 17},
+                {'question': '签了合同发现被坑了，可以撤销吗？', 'answer': '合同可撤销的情形包括：重大误解、欺诈、胁迫、显失公平。需在知道或应当知道撤销事由之日起1年内向法院或仲裁机构申请撤销。撤销后合同自始无效，双方返还财产。超过除斥期间将丧失撤销权。建议发现后尽快咨询律师评估。', 'category': '合同纠纷', 'sort_order': 18},
+                {'question': '合同里面违约金约定得特别高有效吗？', 'answer': '约定的违约金过分高于造成的损失的，当事人可以请求法院或仲裁机构适当减少。司法实践中，违约金超过实际损失30%的一般可认定为过高。法院会综合考量实际损失、合同履行情况、当事人过错程度等因素酌情调整。', 'category': '合同纠纷', 'sort_order': 19},
+                {'question': '别人欠钱不还，没有借条怎么办？', 'answer': '没有借条不等于无法追讨。可收集以下证据：银行转账记录、微信/支付宝转账记录、催款聊天记录、通话录音（注意合法性）、证人证言。多份证据形成完整证据链同样可胜诉。建议尽早起诉，避免超过3年诉讼时效。', 'category': '债权债务', 'sort_order': 20},
+                {'question': '债务人转移财产逃避债务怎么办？', 'answer': '如发现债务人无偿或以明显不合理的低价转让财产，可向法院申请撤销该转让行为（撤销权）。撤销权自债权人知道撤销事由之日起1年内行使，自行为发生之日起5年内未行使的消灭。起诉时可同时申请财产保全，防止进一步转移。', 'category': '债权债务', 'sort_order': 21},
+                {'question': '买的房子迟迟不交房，开发商违约怎么维权？', 'answer': '开发商逾期交房的维权路径：1）按合同约定主张逾期交房违约金（一般为已付房款的日万分之1-3）；2）逾期超过约定期限（通常90天或180天）的可要求退房；3）向住建部门投诉；4）集体维权时注意委托专业律师统一代理。保留购房合同、付款凭证、催告函等证据。', 'category': '房产纠纷', 'sort_order': 22},
+                {'question': '二手房交易中卖方一房二卖怎么办？', 'answer': '根据物权登记原则：已办理过户登记的买受人取得房屋所有权；均未登记的，已先行合法占有房屋的优先；均未占有的，合同签订在先的优先。建议二手房交易中：1）签约后尽快办理网签备案；2）及早办理过户登记；3）如发现一房二卖立即起诉并申请财产保全。', 'category': '房产纠纷', 'sort_order': 23},
+                {'question': '小公司有必要请常年法律顾问吗？', 'answer': '有必要。小公司面临合同风险、劳动用工风险、应收账款催收、知识产权保护等问题。常年法律顾问费用远低于单次诉讼成本，起到事前预防作用。一般年费数千元至数万元不等，包括合同审查、法律咨询、律师函等服务，性价比很高。', 'category': '公司法律', 'sort_order': 24},
+                {'question': '合伙做生意需要签什么协议？', 'answer': '合伙必须签订书面合伙协议，明确以下内容：出资比例与方式、利润分配与亏损承担、经营管理权限、决策机制（特别是重大事项表决规则）、入伙与退伙条件、争议解决方式。协议应尽量具体明确，避免因口头约定产生纠纷。建议由专业律师起草或审查。', 'category': '公司法律', 'sort_order': 25},
+                {'question': '发生交通事故后应该怎么做？', 'answer': '事故处理流程：1）立即停车、保护现场、救助伤者（拨打120）；2）报警（122）并通知保险公司；3）拍照取证：现场全景、碰撞部位、车牌、路况；4）交换驾驶证、行驶证、保单信息；5）轻微事故可协商后去快处快赔中心处理；6）有人受伤或争议大的，等交警出具事故认定书。48小时内通知保险公司，避免拒赔。', 'category': '交通事故', 'sort_order': 26},
             ]
             for data in sample_faqs:
                 db.session.add(FAQ(**data))
@@ -1226,13 +1260,16 @@ def inject_globals():
     site_description = SiteSetting.get('site_description', '专业 · 诚信 · 高效')
     lawyer_avatar = SiteSetting.get('lawyer_avatar', '')
     wechat_qrcode = SiteSetting.get('wechat_qrcode', '')
+    miniprogram_appid = SiteSetting.get('miniprogram_appid', 'wxe938b1e08ed9bddc')
+    miniprogram_qrcode = SiteSetting.get('miniprogram_qrcode', '')
     return dict(
         now=lambda: datetime.now(),
         site_name=site_name,
         phone=phone, address=address, icp=icp,
         lawyer_name=lawyer_name, lawyer_title=lawyer_title,
         site_description=site_description, lawyer_avatar=lawyer_avatar,
-        wechat_qrcode=wechat_qrcode, SiteSetting=SiteSetting
+        wechat_qrcode=wechat_qrcode, miniprogram_appid=miniprogram_appid,
+        miniprogram_qrcode=miniprogram_qrcode, SiteSetting=SiteSetting
     )
 
 

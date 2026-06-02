@@ -1188,6 +1188,93 @@ img { max-width: 100%; height: auto; }
 
 .cases-preview-section { background: var(--bg); }
 
+/* ============ 小程序入口浮动按钮 ============ */
+.miniapp-widget { position: fixed; bottom: 130px; right: 40px; z-index: 998; }
+.miniapp-toggle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #07c160, #06ad56);
+    color: #fff;
+    font-size: 1.4rem;
+    border: 3px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(7,193,96,0.45);
+    transition: all 0.3s;
+    animation: miniapp-pulse 2s ease-in-out infinite;
+}
+.miniapp-toggle:hover { background: linear-gradient(135deg, #06ad56, #05944a); transform: scale(1.1); animation: none; box-shadow: 0 6px 28px rgba(7,193,96,0.6); }
+@keyframes miniapp-pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(7,193,96,0.45); }
+    50% { box-shadow: 0 4px 30px rgba(7,193,96,0.7), 0 0 0 8px rgba(7,193,96,0.1); }
+}
+.miniapp-popup {
+    display: none;
+    position: absolute;
+    bottom: 68px;
+    right: 0;
+    width: 260px;
+    background: var(--bg-white);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    overflow: hidden;
+}
+.miniapp-popup.active { display: block; }
+.miniapp-popup-header {
+    background: #07c160;
+    color: #fff;
+    padding: .7rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: .9rem;
+}
+.miniapp-popup-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+.miniapp-popup-close:hover { color: #fff; }
+.miniapp-popup-body {
+    padding: 1.2rem;
+    text-align: center;
+}
+.miniapp-qrcode {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    margin-bottom: .8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+}
+.miniapp-qrcode-placeholder {
+    width: 160px;
+    height: 160px;
+    background: var(--bg);
+    margin: 0 auto .8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 2px dashed var(--border);
+    color: var(--text-muted);
+    font-size: .8rem;
+    line-height: 1.5;
+}
+.miniapp-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: .9rem;
+    margin-bottom: .3rem;
+}
+.miniapp-tip {
+    font-size: .78rem;
+    color: var(--text-muted);
+}
+.mcb-miniapp { color: #07c160; }
+
 /* ============ AI 聊天组件 ============ */
 .chat-widget { position: fixed; bottom: 60px; right: 40px; z-index: 999; }
 .chat-toggle {
@@ -1318,7 +1405,7 @@ img { max-width: 100%; height: auto; }
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 0.6rem 0.5rem;
+    padding: 0.5rem 0.2rem;
     text-decoration: none !important;
     border: none;
     background: none;
@@ -1326,19 +1413,20 @@ img { max-width: 100%; height: auto; }
     cursor: pointer;
     color: var(--text);
     transition: all 0.2s;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
-.mcb-icon { font-size: 1.3rem; margin-bottom: 2px; }
-.mcb-label { font-size: 0.7rem; font-weight: 500; }
+.mcb-icon { font-size: 1.2rem; margin-bottom: 1px; }
+.mcb-label { font-size: 0.65rem; font-weight: 500; }
 .mcb-call { color: var(--primary); }
 .mcb-consult {
     background: var(--primary);
     color: #fff !important;
-    border-radius: 2px 2px 0 0;
-    margin-top: -8px;
-    padding-top: 0.8rem;
+    border-radius: 4px 4px 0 0;
+    margin-top: -6px;
+    padding-top: 0.7rem;
 }
 .mcb-wechat { color: #07c160; }
+.mcb-miniapp { color: #07c160; }
 
 /* 微信弹窗 */
 .wechat-modal-overlay {
@@ -1379,8 +1467,9 @@ img { max-width: 100%; height: auto; }
 /* 移动端底部栏与 AI 聊天按钮共存 */
 @media (max-width: 768px) {
     .mobile-contact-bar { display: flex; }
-    body { padding-bottom: 70px; }
-    .chat-widget { bottom: 80px; }
+    body { padding-bottom: 75px; }
+    .chat-widget { bottom: 80px; right: 12px; }
+    .miniapp-widget { bottom: 145px; right: 12px; }
 }
 
 /* ============ 面包屑导航 ============ */

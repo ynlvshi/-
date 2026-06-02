@@ -205,24 +205,45 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // =======================
-    // 智能咨询弹窗（30秒后弹出）
+    // 智能咨询弹窗（15秒 + 退出意图）
     // =======================
     var smartPopup = document.getElementById('smartPopup');
     var smartPopupClose = document.getElementById('smartPopupClose');
     if (smartPopup && smartPopupClose) {
-        var popupShown = sessionStorage.getItem('popupShown');
-        if (!popupShown) {
-            setTimeout(function() {
-                smartPopup.style.display = 'flex';
-                sessionStorage.setItem('popupShown', '1');
-                if (typeof _hmt !== 'undefined') _hmt.push(['_trackEvent', 'popup', 'show', 'smart_consult']);
-            }, 30000);
+        var popupDismissed = sessionStorage.getItem('popupDismissed');
+        var popupShown = false;
+
+        function showPopup() {
+            if (popupDismissed || popupShown) return;
+            popupShown = true;
+            smartPopup.style.display = 'flex';
+            sessionStorage.setItem('popupShown', '1');
+            if (typeof _hmt !== 'undefined') _hmt.push(['_trackEvent', 'popup', 'show', 'smart_consult']);
         }
+
+        // 15秒后弹出
+        if (!popupDismissed) {
+            setTimeout(showPopup, 15000);
+        }
+
+        // 退出意图触发（鼠标移出页面顶部）
+        if (!popupDismissed) {
+            document.addEventListener('mouseout', function(e) {
+                if (e.clientY < 10 && e.relatedTarget === null) {
+                    showPopup();
+                }
+            }, { once: false });
+        }
+
         smartPopupClose.addEventListener('click', function() {
             smartPopup.style.display = 'none';
+            sessionStorage.setItem('popupDismissed', '1');
         });
         smartPopup.addEventListener('click', function(e) {
-            if (e.target === smartPopup) smartPopup.style.display = 'none';
+            if (e.target === smartPopup) {
+                smartPopup.style.display = 'none';
+                sessionStorage.setItem('popupDismissed', '1');
+            }
         });
     }
 
@@ -241,6 +262,28 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         wechatModal.addEventListener('click', function(e) {
             if (e.target === wechatModal) wechatModal.classList.remove('active');
+        });
+    }
+
+    // =======================
+    // 小程序弹窗
+    // =======================
+    var miniappToggle = document.getElementById('miniappToggle');
+    var miniappPopup = document.getElementById('miniappPopup');
+    var miniappPopupClose = document.getElementById('miniappPopupClose');
+    var mcbMiniapp = document.getElementById('mcbMiniapp');
+    if (miniappToggle && miniappPopup) {
+        miniappToggle.addEventListener('click', function() {
+            miniappPopup.classList.toggle('active');
+        });
+        miniappPopupClose.addEventListener('click', function() {
+            miniappPopup.classList.remove('active');
+        });
+    }
+    if (mcbMiniapp && miniappPopup) {
+        mcbMiniapp.addEventListener('click', function() {
+            miniappPopup.classList.toggle('active');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         });
     }
 });

@@ -7,10 +7,16 @@
     <meta name="robots" content="index, follow">
     <meta name="format-detection" content="telephone=yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>{% block title %}{{ site_name }}{% endblock %} - {{ site_name }} | 云南昆明</title>
+    <meta name="theme-color" content="#1a5fb4">
+    <title>{% block title %}{{ site_name }}{% endblock %} - {{ site_name }} | 云南昆明专业法律服务</title>
+    <!-- DNS 预解析 -->
+    <link rel="dns-prefetch" href="//hm.baidu.com">
+    <link rel="preconnect" href="//hm.baidu.com" crossorigin>
     <meta name="description" content="{% block meta_desc %}{{ site_name }}，云南昆明专业法律服务。专注建设工程、政企法律顾问、民商事诉讼、刑事辩护。电话{{ phone }}。{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}昆明律师,云南律师,建设工程律师,法律顾问,刑事辩护,民事诉讼,企业法律顾问{% endblock %}">
     <link rel="canonical" href="{{ request.url_root.rstrip('/') }}{{ request.path }}">
+    <link rel="alternate" hreflang="zh-CN" href="{{ request.url_root.rstrip('/') }}{{ request.path }}">
+    <link rel="alternate" hreflang="x-default" href="{{ request.url_root.rstrip('/') }}{{ request.path }}">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a3a5c'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23b8860b'>⚖</text></svg>">
     <!-- Open Graph / 微信分享卡片 -->
     <meta property="og:type" content="website">
@@ -20,7 +26,7 @@
     <meta property="og:url" content="{{ request.url_root.rstrip('/') }}{{ request.path }}">
     <meta property="og:image" content="{{ request.url_root.rstrip('/') }}{% if lawyer_avatar %}{{ url_for('static', filename=lawyer_avatar) }}{% else %}{{ url_for('static', filename='uploads/lawyer_avatar.jpg') }}{% endif %}">
     <meta property="og:locale" content="zh_CN">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260527a">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260602">
     {% block extra_css %}{% endblock %}
     {% set baidu_id = SiteSetting.get('baidu_tongji_id', '') %}
     {% set ga_id = SiteSetting.get('google_analytics_id', '') %}
@@ -175,6 +181,29 @@
         </div>
     </div>
 
+    <!-- 微信小程序入口浮动按钮 -->
+    <div class="miniapp-widget" id="miniappWidget">
+        <button class="miniapp-toggle" id="miniappToggle" title="微信小程序">📱</button>
+        <div class="miniapp-popup" id="miniappPopup">
+            <div class="miniapp-popup-header">
+                <span>📱 微信小程序</span>
+                <button class="miniapp-popup-close" id="miniappPopupClose">✕</button>
+            </div>
+            <div class="miniapp-popup-body">
+                {% if miniprogram_qrcode %}
+                <img src="{{ url_for('static', filename=miniprogram_qrcode) }}" alt="小程序码" class="miniapp-qrcode">
+                {% else %}
+                <div class="miniapp-qrcode-placeholder">
+                    <span>请在后台设置<br>小程序码图片</span>
+                </div>
+                {% endif %}
+                <p class="miniapp-name">云法律师 建设工程法律咨询</p>
+                <p class="miniapp-tip">微信扫一扫或长按识别</p>
+                <p class="miniapp-tip">随时随地咨询法律问题</p>
+            </div>
+        </div>
+    </div>
+
     <!-- AI 法律咨询聊天组件 -->
     <div class="chat-widget" id="chatWidget">
         <button class="chat-toggle" id="chatToggle" title="法律咨询">💬</button>
@@ -203,6 +232,10 @@
             <span class="mcb-icon">💬</span>
             <span class="mcb-label">在线咨询</span>
         </a>
+        <button class="mcb-item mcb-miniapp" id="mcbMiniapp" type="button">
+            <span class="mcb-icon">📱</span>
+            <span class="mcb-label">小程序</span>
+        </button>
         <button class="mcb-item mcb-wechat" id="mcbWechat" type="button">
             <span class="mcb-icon">💚</span>
             <span class="mcb-label">添加微信</span>
@@ -225,7 +258,7 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}?v=20260527a"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}?v=20260602"></script>
     {% block extra_js %}{% endblock %}
     <script>
         function toggleMobileMenu() {

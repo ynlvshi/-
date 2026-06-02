@@ -67,6 +67,20 @@
         </div>
         {% endif %}
 
+        <!-- 相关FAQ -->
+        {% if related_faqs %}
+        <div class="related-section" style="margin-top:2rem;">
+            <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:2px solid var(--border);">❓ 相关问题解答</h3>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                {% for rf in related_faqs %}
+                <a href="/faq?cat={{ rf.category }}" style="padding:0.6rem 1rem;background:var(--bg);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.95rem;transition:all 0.2s;border-left:3px solid var(--accent);">
+                    {{ rf.question }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         <!-- 咨询引导 CTA -->
         <div class="article-cta">
             <h3>有类似法律问题？</h3>
